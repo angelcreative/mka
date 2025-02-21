@@ -8,16 +8,19 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    sourcemap: false,
     rollupOptions: {
+      input: path.resolve(__dirname, 'index.html'),
       output: {
-        manualChunks: undefined
+        entryFileNames: 'main.js',
+        chunkFileNames: '[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash][extname]'
       }
     }
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')
-    }
+    },
+    extensions: ['.js', '.jsx']
   }
 }) 
