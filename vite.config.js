@@ -8,12 +8,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    assetsDir: 'assets',
     rollupOptions: {
-      input: path.resolve(__dirname, 'index.html'),
+      input: {
+        index: path.resolve(__dirname, 'index.html')
+      },
       output: {
-        entryFileNames: 'main.js',
-        chunkFileNames: '[name].[hash].js',
-        assetFileNames: 'assets/[name].[hash][extname]'
+        entryFileNames: `assets/index.js`,
+        chunkFileNames: `assets/[name].[hash].js`,
+        assetFileNames: `assets/[name].[hash].[ext]`
       }
     }
   },
