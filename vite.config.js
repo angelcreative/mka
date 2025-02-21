@@ -17,9 +17,13 @@ export default defineConfig(({ mode }) => {
     base: '/mka/',
     build: {
       outDir: 'dist',
+      assetsDir: 'assets',
       rollupOptions: {
+        input: path.resolve(__dirname, 'index.html'),
         output: {
-          manualChunks: undefined
+          entryFileNames: 'assets/index.js',
+          chunkFileNames: 'assets/[name].[hash].js',
+          assetFileNames: 'assets/[name].[hash][extname]'
         }
       }
     },
