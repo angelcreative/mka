@@ -17,15 +17,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'npm'
           
       - name: Install Dependencies
         run: npm ci
         
       - name: Build
         run: npm run build
-        
-      - name: Configure 404
-        run: cp dist/index.html dist/404.html
         
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
