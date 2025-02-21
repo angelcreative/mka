@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #f7f7f7;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+}
+
+.prose th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+}
+
+.prose td {
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+}
+
+.prose tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.prose tr:hover {
+  background-color: #f3f4f6;
+}
+
+/* Asegurar que los emojis se muestren correctamente */
+.prose td img.emoji {
+  display: inline;
+  height: 1em;
+  width: 1em;
+  margin: 0 0.1em;
+  vertical-align: -0.1em;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.table-responsive table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.table-responsive th,
+.table-responsive td {
+  padding: 0.75rem;
+  text-align: left;
+  border: 1px solid #e2e8f0;
+}
+
+.table-responsive th {
+  background-color: #f8fafc;
+  font-weight: 600;
+}
+
+.table-responsive tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+.table-responsive tr:hover {
+  background-color: #edf2f7;
+}
+
+.prose h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #1a1a1a;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #1a1a1a;
+}
+
+.prose p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.prose .font-semibold {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.prose .space-y-4 > * {
+  margin-top: 1rem;
+}
+
+.prose .ml-4 {
+  margin-left: 1rem;
+} 
