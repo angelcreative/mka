@@ -10,7 +10,17 @@ export default defineConfig({
     assetsDir: 'assets',
     manifest: true,
     rollupOptions: {
-      input: path.resolve(__dirname, 'index.html')
+      input: path.resolve(__dirname, 'index.html'),
+      output: {
+        entryFileNames: (chunkInfo) => {
+          if (chunkInfo.name === 'index') {
+            return 'src/main.js';
+          }
+          return 'assets/[name].[hash].js';
+        },
+        chunkFileNames: 'assets/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash][extname]'
+      }
     }
   },
   resolve: {
