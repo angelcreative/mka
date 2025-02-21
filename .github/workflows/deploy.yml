@@ -27,10 +27,14 @@ jobs:
           
       - name: Build
         env:
-          VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
+          VITE_OPENAI_API_KEY: ''
         run: |
           npm run build
           cp dist/index.html dist/404.html
+
+      - name: Inject API Key
+        run: |
+          find dist -type f -name "*.js" -exec sed -i "s/__OPENAI_API_KEY__/'${{ secrets.VITE_OPENAI_API_KEY }}'/g" {} +
         
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

@@ -20,14 +20,14 @@ export default defineConfig(({ mode }) => {
       assetsDir: '',
       rollupOptions: {
         output: {
-          entryFileNames: `assets/[name].js`,
-          chunkFileNames: `assets/[name].js`,
-          assetFileNames: `assets/[name].[ext]`
+          entryFileNames: `assets/[name].[hash].js`,
+          chunkFileNames: `assets/[name].[hash].js`,
+          assetFileNames: `assets/[name].[hash].[ext]`
         }
       }
     },
     define: {
-      'window.VITE_OPENAI_API_KEY': JSON.stringify(process.env.VITE_OPENAI_API_KEY || '')
+      '__OPENAI_API_KEY__': '""'
     }
   }
 }) 
