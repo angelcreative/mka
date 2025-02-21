@@ -26,6 +26,8 @@ jobs:
           echo "VITE_OPENAI_API_KEY=${{ secrets.VITE_OPENAI_API_KEY }}" > .env
           
       - name: Build
+        env:
+          VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
         run: |
           npm run build
           cp dist/index.html dist/404.html

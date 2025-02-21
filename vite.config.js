@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
       }
     },
     define: {
-      'process.env.VITE_OPENAI_API_KEY': JSON.stringify(env.VITE_OPENAI_API_KEY)
+      'window.VITE_OPENAI_API_KEY': JSON.stringify(process.env.VITE_OPENAI_API_KEY || '')
     }
   }
 }) 

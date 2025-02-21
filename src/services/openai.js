@@ -14,7 +14,7 @@ const MODEL = 'gpt-4-0125-preview'; // Using the latest GPT-4 model
 const openai = axios.create({
   baseURL: API_URL,
   headers: {
-    'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+    'Authorization': `Bearer ${window.VITE_OPENAI_API_KEY || import.meta.env.VITE_OPENAI_API_KEY}`,
     'Content-Type': 'application/json',
   },
 });
