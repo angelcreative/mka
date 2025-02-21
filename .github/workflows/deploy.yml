@@ -26,7 +26,9 @@ jobs:
           echo "VITE_OPENAI_API_KEY=${{ secrets.VITE_OPENAI_API_KEY }}" > .env
           
       - name: Build
-        run: npm run build
+        run: |
+          npm run build
+          cp dist/index.html dist/404.html
         
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

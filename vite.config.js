@@ -14,10 +14,17 @@ export default defineConfig(({ mode }) => {
     optimizeDeps: {
       exclude: ['pdfjs-dist']
     },
-    base: mode === 'production' ? '/mka/' : '/',
+    base: '/mka/',
     build: {
       outDir: 'dist',
-      assetsDir: 'assets',
+      assetsDir: '',
+      rollupOptions: {
+        output: {
+          entryFileNames: `assets/[name].js`,
+          chunkFileNames: `assets/[name].js`,
+          assetFileNames: `assets/[name].[ext]`
+        }
+      }
     },
     define: {
       'process.env.VITE_OPENAI_API_KEY': JSON.stringify(env.VITE_OPENAI_API_KEY)
