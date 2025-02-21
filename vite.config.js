@@ -6,24 +6,11 @@ export default defineConfig({
   plugins: [react()],
   base: '/mka/',
   build: {
-    outDir: 'dist',
-    emptyOutDir: true,
-    assetsDir: 'assets',
-    rollupOptions: {
-      input: {
-        index: path.resolve(__dirname, 'index.html')
-      },
-      output: {
-        entryFileNames: `assets/index.js`,
-        chunkFileNames: `assets/[name].[hash].js`,
-        assetFileNames: `assets/[name].[hash].[ext]`
-      }
-    }
+    outDir: 'dist'
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src')
-    },
-    extensions: ['.js', '.jsx']
+    }
   }
 }) 
