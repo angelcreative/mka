@@ -21,20 +21,8 @@ jobs:
       - name: Install Dependencies
         run: npm ci
         
-      - name: Create env file
-        run: |
-          echo "VITE_OPENAI_API_KEY=${{ secrets.VITE_OPENAI_API_KEY }}" > .env
-          
       - name: Build
-        env:
-          VITE_OPENAI_API_KEY: ''
-        run: |
-          npm run build
-          cp dist/index.html dist/404.html
-
-      - name: Inject API Key
-        run: |
-          find dist -type f -name "*.js" -exec sed -i "s/__OPENAI_API_KEY__/'${{ secrets.VITE_OPENAI_API_KEY }}'/g" {} +
+        run: npm run build
         
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

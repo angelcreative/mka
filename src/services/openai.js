@@ -8,8 +8,8 @@ PDFJS.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-const API_URL = 'https://api.openai.com/v1/chat/completions';
-const MODEL = 'gpt-4-0125-preview'; // Using the latest GPT-4 model
+const API_URL = '/api/openai';  // Usaremos un proxy
+const MODEL = 'gpt-4-0125-preview';
 
 const getApiKey = () => {
   // En desarrollo
@@ -25,16 +25,6 @@ const openai = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-});
-
-// Interceptor para añadir la API key en cada request
-openai.interceptors.request.use(config => {
-  const apiKey = getApiKey();
-  if (!apiKey) {
-    throw new Error('OpenAI API key is not configured');
-  }
-  config.headers.Authorization = `Bearer ${apiKey}`;
-  return config;
 });
 
 const extractTextFromPdf = async (pdfData) => {
