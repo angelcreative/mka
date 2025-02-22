@@ -1,4 +1,5 @@
 import PdfAnalyzer from './components/PdfAnalyzer';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         </div>
         <PdfAnalyzer />
       </div>
+      <Footer />
     </div>
   )
 }

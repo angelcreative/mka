@@ -120,7 +120,7 @@ function PdfAnalyzer() {
         </div>
 
         <div className="text-center text-sm text-purple-400">
-          <p>Supported formats: PDF documents, Excel spreadsheets and CSV files (.pdf, .xlsx, .xls, .csv)</p>
+          <p className="text-text-tertiary">Supported formats: PDF documents, Excel spreadsheets and CSV files (.pdf, .xlsx, .xls, .csv)</p>
         </div>
 
         <div className="flex justify-center">
