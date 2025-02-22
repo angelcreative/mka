@@ -113,24 +113,88 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
           Structure your analysis with these key sections using markdown:
           
           1. Segment Overlap Analysis
-          Present a clear table showing overlapping segments between both brands:
+          A. Direct Overlap Table:
           | Segment | ${brand1} (%) | ${brand2} (%) | Overlap Impact |
           |---------|---------------|---------------|----------------|
           
-          2. Customer Loyalty Analysis
+          B. Segment Distribution:
+          | Category | ${brand1} Share | ${brand2} Share | Market Position |
+          |----------|----------------|----------------|-----------------|
+          
+          C. Growth Opportunities:
+          | Segment | Current Share | Target Share | Growth Strategy |
+          |---------|--------------|--------------|-----------------|
+          
+          2. Audience Value Analysis
+          A. Quantitative Metrics Table:
+          | Metric | ${brand1} | ${brand2} | Gap/Opportunity |
+          |--------|-----------|-----------|-----------------|
+          Key Metrics to Compare:
+          - Engagement Rate (%)
+          - Content Interaction (%)
+          - Platform Activity (%)
+          - Growth Velocity (%)
+          - Retention Rate (%)
+          - Cross-platform Presence (%)
+          
+          B. Qualitative Value Assessment:
+          | Aspect | ${brand1} | ${brand2} | Strategic Implications |
+          |--------|-----------|-----------|----------------------|
+          Analyze:
+          - Content preferences
+          - Behavioral patterns
+          - Cultural alignment
+          - Community engagement
+          
+          3. Competitive Position Matrix
+          A. Market Position Table:
+          | Category | ${brand1} Strength | ${brand2} Strength | Market Opportunity |
+          |----------|-------------------|-------------------|-------------------|
+          
+          B. Brand Perception Analysis:
+          | Dimension | ${brand1} Perception | ${brand2} Perception | Key Differentiators |
+          |-----------|---------------------|---------------------|-------------------|
+          Include:
+          - Brand values alignment
+          - Content quality perception
+          - Platform experience
+          - Community sentiment
+          
+          4. Customer Loyalty Analysis
+          A. Loyalty Drivers Table:
+          | Driver | ${brand1} Impact | ${brand2} Impact | Retention Opportunity |
+          |--------|----------------|----------------|---------------------|
+          
+          B. Qualitative Insights:
           - Deep dive into emotional and practical factors
           - Key loyalty drivers by segment
           - Brand perception analysis
+          - Community belonging factors
+          - Content resonance patterns
           
-          3. Conversion Opportunities
+          5. Conversion Opportunities
+          A. Conversion Potential Matrix:
+          | Segment | Current State | Target State | Action Points |
+          |---------|--------------|--------------|---------------|
+          
+          B. Behavioral Analysis:
           - Customer pain points
           - Unmet needs and gaps
           - High-potential segments for conversion
+          - Content consumption patterns
+          - Platform interaction styles
           
-          4. Strategic Recommendations
+          6. Strategic Recommendations
+          A. Strategy Priority Matrix:
+          | Initiative | Impact | Effort | Timeline | Priority |
+          |------------|--------|--------|----------|----------|
+          
+          B. Implementation Framework:
           - Segment-specific strategies
           - Value proposition enhancements
           - Customer journey optimization
+          - Content strategy alignment
+          - Community building tactics
           
           Guidelines:
           - Focus on actionable insights
@@ -138,6 +202,13 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
           - Ensure all segments mentioned have clear metrics
           - Avoid empty or low-value sections
           - Use clear, business-focused language
+          - Present quantitative comparisons in tables
+          - Include market context and implications
+          - Highlight competitive advantages and gaps
+          - Balance data with qualitative insights
+          - Consider cultural and behavioral factors
+          - Analyze content-audience fit
+          - Evaluate community dynamics
           
           Focus your analysis on comparing the audience reports.`
         },
