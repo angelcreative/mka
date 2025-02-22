@@ -131,7 +131,7 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
     const response = await openai.post('', message);
     console.log('Response received:', response.status);
 
-    return response.data;
+    return response.data.choices[0].message.content;
   } catch (error) {
     console.error('Error details:', {
       message: error.message,
