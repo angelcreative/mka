@@ -3,9 +3,9 @@ import { FiPrinter, FiCopy } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-const AnalysisCard = ({ title, content, onPrint, onCopy }) => {
+const AnalysisCard = ({ title, content, onPrint, onCopy, className = '' }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
+    <div className={`bg-white rounded-lg shadow-sm p-6 ${className}`}>
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
         <div className="flex gap-2">
@@ -64,6 +64,13 @@ const AnalysisResults = ({ results }) => {
     };
   });
 
+  // Filtrar secciones sin contenido real
+  const validSections = sections.filter(section => 
+    section.content && 
+    section.content !== 'No content available' && 
+    !section.content.toLowerCase().includes('no content available')
+  );
+
   if (sections.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
@@ -100,14 +107,20 @@ const AnalysisResults = ({ results }) => {
   };
 
   return (
-    <div className="space-y-6">
-      {sections.map((section, index) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {validSections.map((section, index) => (
         <AnalysisCard
           key={index}
           title={section.title}
           content={section.content}
           onPrint={() => handlePrint(section)}
           onCopy={() => handleCopy(section)}
+          className={`${
+            section.title.toLowerCase().includes('overlap') || 
+            section.title.toLowerCase().includes('affinity')
+              ? 'md:col-span-2'
+              : ''
+          }`}
         />
       ))}
     </div>

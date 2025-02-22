@@ -15,17 +15,38 @@ function PdfAnalyzer() {
   const [chatMessages, setChatMessages] = useState([]);
   const [userMessage, setUserMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [fileErrors, setFileErrors] = useState({ pdf1: null, pdf2: null });
 
   const handleFileChange = (event, fileKey) => {
     const file = event.target.files[0];
+    const validTypes = {
+      'application/pdf': true,
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': true,
+      'application/vnd.ms-excel': true,
+      'text/csv': true,
+      'application/csv': true,
+      'text/x-csv': true,
+      'application/x-csv': true,
+      'text/comma-separated-values': true,
+      'text/x-comma-separated-values': true
+    };
+
+    const validExtensions = ['.pdf', '.xlsx', '.xls', '.csv'];
+
+    const fileExtension = file?.name.toLowerCase().match(/\.[^.]*$/)?.[0];
+
     if (file && (
-      file.type === 'application/pdf' || 
-      file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
-      file.type === 'application/vnd.ms-excel' ||
-      file.type === 'text/csv' ||
-      file.name.endsWith('.csv')  // Para manejar CSVs que no tengan el tipo MIME correcto
+      validTypes[file.type] || 
+      (fileExtension && validExtensions.includes(fileExtension))
     )) {
       setFiles(prev => ({ ...prev, [fileKey]: file }));
+      setFileErrors(prev => ({ ...prev, [fileKey]: null }));
+    } else {
+      setFileErrors(prev => ({ 
+        ...prev, 
+        [fileKey]: 'Please upload a valid PDF, Excel (.xlsx, .xls) or CSV file'
+      }));
+      event.target.value = null;
     }
   };
 
@@ -88,7 +109,8 @@ function PdfAnalyzer() {
                 <MdUploadFile className="mx-auto text-4xl text-primary-400 mb-2" />
                 <span className="text-primary-600 font-semibold">My Brand Report</span>
                 <p className="text-sm text-text-tertiary mt-1">Upload PDF, Excel or CSV report</p>
-                {files.pdf1 && <p className="mt-2 text-sm text-purple-500">{files.pdf1.name}</p>}
+                {files.pdf1 && <p className="mt-2 text-sm text-[#1f1f1f]">{files.pdf1.name}</p>}
+                {fileErrors.pdf1 && <p className="mt-2 text-sm text-red-500">{fileErrors.pdf1}</p>}
               </label>
             </div>
             <input
@@ -114,7 +136,8 @@ function PdfAnalyzer() {
                 <MdUploadFile className="mx-auto text-4xl text-primary-400 mb-2" />
                 <span className="text-primary-600 font-semibold">Your Competitor Report</span>
                 <p className="text-sm text-text-tertiary mt-1">Upload PDF, Excel or CSV report</p>
-                {files.pdf2 && <p className="mt-2 text-sm text-purple-500">{files.pdf2.name}</p>}
+                {files.pdf2 && <p className="mt-2 text-sm text-[#1f1f1f]">{files.pdf2.name}</p>}
+                {fileErrors.pdf2 && <p className="mt-2 text-sm text-red-500">{fileErrors.pdf2}</p>}
               </label>
             </div>
             <input
