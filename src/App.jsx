@@ -7,7 +7,7 @@ function App() {
       <div className="container mx-auto px-4 py-16">
         <div className="text-center space-y-8 mb-12">
           <img 
-            src={new URL('./assets/audiense-logo-black.svg', import.meta.url).href}
+            src="https://cdn.prod.website-files.com/61a61781d327712f7cb32e56/67b9dbc1b8f175058773ceae_labs.svg"
             alt="Audiense Logo"
             className="h-12 mx-auto mb-6"
             style={{ maxWidth: '120px' }} />
