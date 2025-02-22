@@ -32,7 +32,6 @@ const AnalysisCard = ({ title, content, onPrint, onCopy, className = '' }) => {
     const rows = content.split('\n').filter(row => row.includes('|'));
     if (rows.length < 3) return null;
 
-    // Extraer headers y datos, ignorando la fila de separación (|----|)
     const headers = rows[0].split('|')
       .filter(Boolean)
       .map(h => h.trim());
@@ -45,11 +44,19 @@ const AnalysisCard = ({ title, content, onPrint, onCopy, className = '' }) => {
       return {
         label: cells[0],
         values: cells.slice(1).map(val => {
+          if (val === 'N/A' || val === '-') return 0;
           const number = parseFloat(val.replace(/[^0-9.-]/g, ''));
           return isNaN(number) ? 0 : number;
         })
       };
     });
+
+    // Si todos los valores son 0, probablemente sean N/A
+    const allZeros = data.every(row => 
+      row.values.every(val => val === 0)
+    );
+    
+    if (allZeros) return null;
 
     return { headers, data };
   };
@@ -60,14 +67,24 @@ const AnalysisCard = ({ title, content, onPrint, onCopy, className = '' }) => {
 
     const { headers, data } = tableData;
     
+    // Filtrar filas con datos reales
+    const validData = {
+      headers,
+      data: data.filter(row => 
+        row.values.some(val => val > 0)
+      )
+    };
+    
+    if (validData.data.length === 0) return null;
+    
     if (title.toLowerCase().includes('affinity') || title.toLowerCase().includes('overlap')) {
       return (
         <Bar
           data={{
-            labels: data.map(row => row.label),
+            labels: validData.data.map(row => row.label),
             datasets: headers.slice(1).map((header, i) => ({
               label: header,
-              data: data.map(row => row.values[i]),
+              data: validData.data.map(row => row.values[i]),
               backgroundColor: i === 0 ? 'rgba(59, 130, 246, 0.8)' : 'rgba(99, 102, 241, 0.8)',
               borderColor: i === 0 ? 'rgba(59, 130, 246, 1)' : 'rgba(99, 102, 241, 1)',
               borderWidth: 1
@@ -284,7 +301,7 @@ const AnalysisResults = ({ results }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 gap-6">
       {[...groupedSections.fullWidth, ...groupedSections.regular].map((section, index) => (
         <AnalysisCard
           key={index}
@@ -292,11 +309,6 @@ const AnalysisResults = ({ results }) => {
           content={section.content}
           onPrint={() => handlePrint(section)}
           onCopy={() => handleCopy(section)}
-          className={`${
-            groupedSections.fullWidth.includes(section)
-              ? 'md:col-span-2'
-              : ''
-          }`}
         />
       ))}
     </div>
