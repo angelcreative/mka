@@ -2,7 +2,7 @@ import PdfAnalyzer from './components/PdfAnalyzer';
 
 function App() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f7f7f7' }}>
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
         <div className="text-center space-y-8 mb-12">
           <img 

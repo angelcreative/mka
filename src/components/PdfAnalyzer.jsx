@@ -127,8 +127,8 @@ function PdfAnalyzer() {
           <button
             onClick={analyzePdfsHandler}
             disabled={!files.pdf1 || !files.pdf2 || !brands.myBrand || !brands.competitor || loading}
-            className="px-8 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 
-                     transition-colors duration-200 disabled:bg-purple-300 flex items-center space-x-2"
+            className="bg-primary hover:bg-primary-hover active:bg-primary-pressed active:scale-95 
+                     transform transition-all duration-150 text-white px-6 py-3 rounded-lg"
           >
             {loading ? (
               <>
