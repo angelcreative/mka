@@ -6,7 +6,10 @@ export default defineConfig({
   plugins: [react()],
   base: '/mka/',
   define: {
-    'process.env.OPENAI_API_KEY': JSON.stringify(process.env.OPENAI_API_KEY)
+    'process.env': JSON.stringify({
+      NODE_ENV: process.env.NODE_ENV,
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY
+    })
   },
   build: {
     outDir: 'dist',

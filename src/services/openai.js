@@ -12,10 +12,15 @@ const API_URL = process.env.NODE_ENV === 'production'
   ? 'https://api.openai.com/v1/chat/completions'
   : 'http://localhost:3000/api/openai';
 
+console.log('Environment:', process.env.NODE_ENV);
+console.log('API URL:', API_URL);
+console.log('API Key exists:', !!process.env.OPENAI_API_KEY);
+
 const MODEL = 'gpt-4-0125-preview';
 
 const openai = axios.create({
   baseURL: API_URL,
+  timeout: 60000,
   headers: {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
@@ -95,21 +100,50 @@ const getFileContent = async (file) => {
 
 export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
   try {
-    const formData = new FormData();
-    formData.append('pdf1', pdf1);
-    formData.append('pdf2', pdf2);
-    formData.append('brand1', brand1);
-    formData.append('brand2', brand2);
+    const text1 = await getFileContent(pdf1);
+    const text2 = await getFileContent(pdf2);
+    
+    console.log('Files processed successfully');
+    
+    const message = {
+      model: MODEL,
+      messages: [
+        {
+          role: 'system',
+          content: `You are an audience insights expert analyzing ${brand1} and ${brand2} segments.
+          
+          When responding, always structure your answers using proper markdown:
+          
+          - Use tables when comparing segments
+          - Use headers for sections
+          - Use bullet points for lists
+          - Include emojis when mentioning segments
+          
+          Focus your analysis on comparing the audience reports.`
+        },
+        {
+          role: 'user',
+          content: `Report 1 (${brand1}): ${text1}\n\nReport 2 (${brand2}): ${text2}`
+        }
+      ],
+      temperature: 0.7
+    };
 
-    const response = await axios.post(API_URL, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      }
-    });
+    console.log('Making request to OpenAI...');
+    const response = await openai.post('', message);
+    console.log('Response received:', response.status);
 
     return response.data;
   } catch (error) {
-    console.error('Error calling OpenAI API:', error);
+    console.error('Error details:', {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+      config: {
+        url: error.config?.url,
+        headers: error.config?.headers
+      }
+    });
     throw error;
   }
 };
