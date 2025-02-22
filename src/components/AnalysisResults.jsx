@@ -50,7 +50,9 @@ const AnalysisCard = ({ title, content, onPrint, onCopy }) => {
 };
 
 const AnalysisResults = ({ results }) => {
-  const sections = results.split('###').filter(Boolean).map(section => {
+  const analysisText = results?.summary || '';
+
+  const sections = analysisText.split('###').filter(Boolean).map(section => {
     const [title, ...content] = section.trim().split('\n');
     return {
       title: title.trim(),

@@ -151,6 +151,13 @@ function PdfAnalyzer() {
           <div className="mt-8">
             <h2 className="text-2xl font-bold mb-4">Analysis Results</h2>
             <AnalysisResults results={analysis} />
+            <button
+              onClick={() => setShowChat(true)}
+              className="mt-4 flex items-center space-x-2 text-purple-600 mx-auto"
+            >
+              <MdChat />
+              <span>Ask questions about the analysis</span>
+            </button>
           </div>
         )}
 
