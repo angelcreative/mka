@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { MdUploadFile, MdChat } from 'react-icons/md';
+import { HiSparkles } from 'react-icons/hi';
 import { analyzePdfs, chatWithAI } from '@/services/openai';
 import ReactMarkdown from 'react-markdown';
 import { ButtonSpinner } from './Loaders';
@@ -128,7 +129,7 @@ function PdfAnalyzer() {
             onClick={analyzePdfsHandler}
             disabled={!files.pdf1 || !files.pdf2 || !brands.myBrand || !brands.competitor || loading}
             className="bg-primary hover:bg-primary-hover active:bg-primary-pressed active:scale-95 
-                     transform transition-all duration-150 text-white px-8 py-3 rounded-lg cursor-pointer"
+                     transform transition-all duration-150 text-white px-8 py-3 rounded-lg cursor-pointer flex items-center gap-2"
           >
             {loading ? (
               <>
@@ -136,7 +137,10 @@ function PdfAnalyzer() {
                 <span>Analyzing Reports...</span>
               </>
             ) : (
-              <span>Analyze Market Position</span>
+              <>
+                <span>Analyze Market Position</span>
+                <HiSparkles className="w-5 h-5" />
+              </>
             )}
           </button>
         </div>
