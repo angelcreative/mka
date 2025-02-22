@@ -108,64 +108,59 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
       messages: [
         {
           role: 'system',
-          content: `You are a market conquest strategist analyzing ${brand1} and ${brand2} audience data. Your goal is to help ${brand1} capture ${brand2}'s market share.
+          content: `You are a market conquest strategist analyzing ${brand1} and ${brand2} audience data.
           
-          1. Segment Overlap Analysis
-          | Segment | ${brand1} (%) | ${brand2} (%) | Overlap Impact |
-          |---------|---------------|---------------|----------------|
-          | Core Fans | 35.2 | 42.8 | High - Primary target |
-          | Content Creators | 12.5 | 28.4 | Medium - Growth opportunity |
-          | Early Adopters | 8.3 | 15.7 | High - Strategic value |
-
-          2. Segment Distribution
-          | Category | Current Share | Growth Rate | Position |
-          |----------|--------------|-------------|----------|
-          | Premium Users | 28% | +15% YoY | Challenger |
-          | Active Engagers | 45% | +22% YoY | Leader |
+          Core Fans Analysis
+          | Metric | ${brand1} | ${brand2} | Gap Analysis |
+          |--------|-----------|-----------|--------------|
+          | Market Share | 16.3% | 41.5% | -25.2% |
+          | Engagement Rate | 8.2% | 12.4% | -4.2% |
+          | Content Affinity | 85% | 92% | -7% |
           
-          3. Growth Opportunities
-          | Segment | Current Share | Target Share | Growth Strategy |
-          |---------|--------------|--------------|-----------------|
-          | Young Professionals | 18.5% | 35% | Premium features + Social proof |
-          | Content Creators | 12.5% | 30% | Creator tools & monetization |
-
-          4. Quantitative Metrics Table
-          | Metric | ${brand1} | ${brand2} | Gap/Opportunity |
-          |--------|-----------|-----------|----------------|
-          | Engagement Rate | 3.2% | 4.8% | +1.6% to close |
-          | Retention Rate | 68% | 72% | +4% to match |
-          | Growth Velocity | 15% | 22% | +7% acceleration needed |
-
-          5. Qualitative Value Assessment
-          | Aspect | ${brand1} | ${brand2} | Strategic Implications |
-          |--------|-----------|-----------|----------------------|
-          | Brand Loyalty | Medium-High | Very High | Need stronger community features |
-          | Content Quality | Premium | Mixed | Leverage quality advantage |
-
-          6. Market Position Analysis
-          - Current market dynamics
-          - Competitive advantages
-          - Key differentiators
-          - Strategic opportunities
+          ${brand1} has a significant portion of its audience that identifies as fans (16%) and shows a strong affinity for ${brand1}-related content. ${brand2} also shares affinity with similar content but to a lesser extent.
           
-          7. Behavioral Insights
-          | Behavior | ${brand1} | ${brand2} | Action Points |
-          |----------|-----------|-----------|---------------|
-          | Daily Usage | 42 mins | 58 mins | Increase engagement hooks |
-          | Content Creation | 15% | 25% | Simplify creation tools |
+          Content Creators Segment
+          | Metric | ${brand1} | ${brand2} | Opportunity |
+          |--------|-----------|-----------|-------------|
+          | Creator Base | 12.5% | 28.4% | +15.9% growth potential |
+          | Monetization | 25% | 45% | +20% monetization gap |
+          | Tools Usage | 35% | 65% | +30% feature adoption |
+          
+          ${brand1} shows less engagement with content creators compared to ${brand2}. However, both platforms share an affinity for creative and artistic segments.
+          
+          Early Adopters Analysis
+          | Behavior | ${brand1} | ${brand2} | Action Gap |
+          |----------|-----------|-----------|------------|
+          | Tech Adoption | 28% | 42% | +14% to close |
+          | Feature Usage | 45% | 68% | +23% opportunity |
+          | Platform Activity | 3.2h/day | 4.5h/day | +1.3h engagement |
+          
+          Both platforms engage early adopters, with ${brand2} having a higher share. The affinity for tech enthusiasts and gaming community segments on ${brand2} suggests a more technologically curious audience.
+          
+          Strategic Recommendations
+          | Initiative | Current | Target | Impact |
+          |------------|---------|---------|---------|
+          | Creator Program | 12.5% | 30% | +17.5% growth |
+          | Community Features | 45% | 75% | +30% engagement |
+          | Premium Features | 28% | 50% | +22% revenue |
+          | Engagement Hooks | 3.2h | 4.5h | +1.3h usage |
 
-          8. Strategic Recommendations
-          | Initiative | Impact | Priority | Timeline |
-          |------------|--------|----------|----------|
-          | Creator Program | High (+25% growth) | P0 | Q2 2024 |
-          | Community Features | Medium (+15% retention) | P1 | Q3 2024 |
-
-          Guidelines:
-          - Focus on conquest opportunities
-          - Quantify all possible metrics
-          - Identify clear competitive advantages
-          - Highlight actionable growth strategies
-          - Show specific market capture tactics
+          1. Creator Program: Launch a creator program targeting the 'Creatives & Artists' and 'Streamer Community' segments...
+          
+          2. Community Features: Implementing enhanced community features...
+          
+          3. Premium Features for Young Professionals: Given the segment's potential for growth...
+          
+          4. Increase Engagement Hooks: To address the daily usage gap...
+          
+          Conclusion
+          | Key Metric | Current State | Target State | Timeline |
+          |------------|---------------|--------------|----------|
+          | Market Share | 35% | 55% | Q4 2024 |
+          | Creator Base | 12.5k | 25k | Q2 2024 |
+          | User Retention | 68% | 85% | Q3 2024 |
+          
+          The analysis reveals clear opportunities for ${brand1} to focus on its unique strengths...
           
           Provide detailed analysis comparing the reports with focus on market conquest opportunities.`
         },
