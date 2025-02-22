@@ -68,7 +68,7 @@ function PdfAnalyzer() {
         <div className="flex gap-6 justify-center">
           {/* My Brand Upload */}
           <div className="flex-1 max-w-md space-y-4">
-            <div className="border-2 border-dashed border-purple-300 rounded-lg p-6 text-center">
+            <div className="border-2 border-dashed border-primary-100 rounded-lg p-6 text-center">
               <input
                 type="file"
                 accept=".pdf,.xlsx,.xls,.csv"
@@ -77,9 +77,9 @@ function PdfAnalyzer() {
                 id="pdf1"
               />
               <label htmlFor="pdf1" className="cursor-pointer block">
-                <MdUploadFile className="mx-auto text-4xl text-purple-500 mb-2" />
-                <span className="text-purple-600 font-semibold">My Brand Report</span>
-                <p className="text-sm text-purple-400 mt-1">Upload PDF, Excel or CSV report</p>
+                <MdUploadFile className="mx-auto text-4xl text-primary-400 mb-2" />
+                <span className="text-primary-600 font-semibold">My Brand Report</span>
+                <p className="text-sm text-text-tertiary mt-1">Upload PDF, Excel or CSV report</p>
                 {files.pdf1 && <p className="mt-2 text-sm text-purple-500">{files.pdf1.name}</p>}
               </label>
             </div>
@@ -88,13 +88,13 @@ function PdfAnalyzer() {
               placeholder="Enter your brand name (e.g. Disney+)"
               value={brands.myBrand}
               onChange={(e) => setBrands(prev => ({ ...prev, myBrand: e.target.value }))}
-              className="w-full p-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-2 border border-primary-100 rounded-lg text-text-primary placeholder-text-placeholder"
             />
           </div>
 
           {/* Competitor Upload */}
           <div className="flex-1 max-w-md space-y-4">
-            <div className="border-2 border-dashed border-purple-300 rounded-lg p-6 text-center">
+            <div className="border-2 border-dashed border-primary-100 rounded-lg p-6 text-center">
               <input
                 type="file"
                 accept=".pdf,.xlsx,.xls,.csv"
@@ -103,9 +103,9 @@ function PdfAnalyzer() {
                 id="pdf2"
               />
               <label htmlFor="pdf2" className="cursor-pointer block">
-                <MdUploadFile className="mx-auto text-4xl text-purple-500 mb-2" />
-                <span className="text-purple-600 font-semibold">Your Competitor Report</span>
-                <p className="text-sm text-purple-400 mt-1">Upload PDF, Excel or CSV report</p>
+                <MdUploadFile className="mx-auto text-4xl text-primary-400 mb-2" />
+                <span className="text-primary-600 font-semibold">Your Competitor Report</span>
+                <p className="text-sm text-text-tertiary mt-1">Upload PDF, Excel or CSV report</p>
                 {files.pdf2 && <p className="mt-2 text-sm text-purple-500">{files.pdf2.name}</p>}
               </label>
             </div>
@@ -114,7 +114,7 @@ function PdfAnalyzer() {
               placeholder="Enter competitor brand name (e.g. Netflix)"
               value={brands.competitor}
               onChange={(e) => setBrands(prev => ({ ...prev, competitor: e.target.value }))}
-              className="w-full p-2 border border-purple-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-2 border border-primary-100 rounded-lg text-text-primary placeholder-text-placeholder"
             />
           </div>
         </div>
@@ -128,7 +128,7 @@ function PdfAnalyzer() {
             onClick={analyzePdfsHandler}
             disabled={!files.pdf1 || !files.pdf2 || !brands.myBrand || !brands.competitor || loading}
             className="bg-primary hover:bg-primary-hover active:bg-primary-pressed active:scale-95 
-                     transform transition-all duration-150 text-white px-6 py-3 rounded-lg"
+                     transform transition-all duration-150 text-white px-8 py-3 rounded-lg cursor-pointer"
           >
             {loading ? (
               <>

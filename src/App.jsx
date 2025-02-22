@@ -11,12 +11,12 @@ function App() {
             className="h-12 mx-auto mb-6"
             style={{ maxWidth: '120px' }} />
           <div className="mx-auto">
-            <h1 className="text-6xl font-bold text-gray-300 leading-tight">
+            <h1 className="text-6xl font-bold text-primary-600 leading-tight">
               Market Conquest Agent
             </h1>
-            <sub>Using Audiense Ai technology</sub>
+            <sub className="text-text-tertiary">Using Audiense Ai technology</sub>
           </div>
-          <p className="text-2xl text-gray-200 max-w-2xl mx-auto">
+          <p className="text-2xl text-text-secondary max-w-2xl mx-auto">
             Transform market research into actionable strategies to convert your competitor's loyal customers into your brand advocates
           </p>
         </div>
