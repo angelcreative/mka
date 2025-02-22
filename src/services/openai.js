@@ -8,7 +8,10 @@ PDFJS.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url
 ).toString();
 
-const API_URL = '/api/openai';  // Usaremos un proxy
+const API_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://api.example.com/api/openai'  // Necesitamos una URL real del backend
+  : 'http://localhost:3000/api/openai';
+
 const MODEL = 'gpt-4-0125-preview';
 
 const getApiKey = () => {
@@ -98,152 +101,21 @@ const getFileContent = async (file) => {
   throw new Error('Unsupported file type');
 };
 
-export const analyzePdfs = async (file1, file2, brandName, competitorName) => {
+export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
   try {
-    const [text1, text2] = await Promise.all([
-      getFileContent(file1),
-      getFileContent(file2)
-    ]);
+    const formData = new FormData();
+    formData.append('pdf1', pdf1);
+    formData.append('pdf2', pdf2);
+    formData.append('brand1', brand1);
+    formData.append('brand2', brand2);
 
-    const response = await openai.post('', {
-      model: MODEL,
-      messages: [
-        {
-          role: 'system',
-          content: `You are a senior market strategist specializing in customer acquisition and brand transitions.
-          Your task is to analyze the provided reports for ${brandName} and ${competitorName} and provide two types of analysis:
-
-          <h1 class="text-3xl font-bold mb-8">Strategic Market Analysis</h1>
-
-          <h2 class="text-2xl font-semibold mb-4">Customer Loyalty Analysis</h2>
-          <ul class="space-y-2 mb-6">
-            <li>Deep dive into emotional and practical factors driving customer loyalty to ${competitorName}</li>
-            <li>Identify specific customer segments and their key loyalty drivers</li>
-            <li>Analyze price sensitivity, brand perception, and switching barriers</li>
-          </ul>
-
-          <h2 class="text-2xl font-semibold mb-4">Conversion Opportunities</h2>
-          <ul class="space-y-2 mb-6">
-            <li>Map customer pain points with ${competitorName}</li>
-            <li>Identify unmet needs and service gaps</li>
-            <li>Highlight demographic and behavioral patterns of customers most likely to switch</li>
-          </ul>
-
-          <h2 class="text-2xl font-semibold mb-4">Targeted Strategies</h2>
-          <ul class="space-y-2 mb-6">
-            <li>Develop segment-specific conversion strategies</li>
-            <li>Outline marketing messages that address emotional and practical switching barriers</li>
-            <li>Create timeline and touchpoint recommendations for the customer journey</li>
-          </ul>
-
-          <h2 class="text-2xl font-semibold mb-4">Differentiated Value Proposition</h2>
-          <ul class="space-y-2 mb-6">
-            <li>Craft compelling reasons to switch that go beyond price</li>
-            <li>Position ${brandName} advantages against ${competitorName} weaknesses</li>
-            <li>Define unique selling propositions for each major customer segment</li>
-          </ul>
-
-          <h1 class="text-3xl font-bold mt-12 mb-8">${competitorName} vs ${brandName} Audience Segment Comparison</h1>
-
-          <h2 class="text-2xl font-semibold mb-4">Similar Segments Across Both Platforms</h2>
-          <table>
-            <tr>
-              <th>${competitorName} Segment</th>
-              <th>${brandName} Segment</th>
-              <th>Similarity Notes</th>
-            </tr>
-            <tr>
-              <td>[Segment with emoji]</td>
-              <td>[Segment with emoji]</td>
-              <td>[Description]</td>
-            </tr>
-          </table>
-
-          <h2 class="text-2xl font-semibold mt-8 mb-4">Unique ${competitorName} Segments</h2>
-          <table>
-            <tr>
-              <th>Segment</th>
-              <th>Size</th>
-              <th>Uniqueness Notes</th>
-            </tr>
-            <tr>
-              <td>[Segment with emoji]</td>
-              <td>[Size]</td>
-              <td>[What makes it unique]</td>
-            </tr>
-          </table>
-
-          <h2 class="text-2xl font-semibold mt-8 mb-4">Unique ${brandName} Segments</h2>
-          <table>
-            <tr>
-              <th>Segment</th>
-              <th>Size</th>
-              <th>Uniqueness Notes</th>
-            </tr>
-            <tr>
-              <td>[Segment with emoji]</td>
-              <td>[Size]</td>
-              <td>[What makes it unique]</td>
-            </tr>
-          </table>
-
-          <h2 class="text-2xl font-semibold mt-8 mb-4">Key Insights</h2>
-          <ol class="space-y-4">
-            <li>
-              <p class="font-semibold">Content Diversity vs. Niche Interests</p>
-              <p class="ml-4">[First insight about content and audience differences]</p>
-            </li>
-            <li>
-              <p class="font-semibold">Platform Strengths</p>
-              <p class="ml-4">[Second insight about platform strengths]</p>
-            </li>
-            <li>
-              <p class="font-semibold">Composition Differences</p>
-              <p class="ml-4">[Third insight about audience composition]</p>
-            </li>
-            <li>
-              <p class="font-semibold">Growth Opportunities</p>
-              <p class="ml-4">[Fourth insight about potential growth]</p>
-            </li>
-            <li>
-              <p class="font-semibold">Potential Strategies</p>
-              <p class="ml-4">[Fifth insight about strategic approaches]</p>
-            </li>
-            <li>
-              <p class="font-semibold">Audience Migration Potential</p>
-              <p class="ml-4">[Sixth insight about audience movement]</p>
-            </li>
-            <li>
-              <p class="font-semibold">Market Positioning</p>
-              <p class="ml-4">[Final insight about market position]</p>
-            </li>
-          </ol>
-
-          Remember:
-          - Keep all emojis in segment names
-          - Include audience sizes in parentheses
-          - Use the exact HTML structure provided
-          - Maintain consistent formatting
-          - Keep segment names exactly as they appear
-          - Ensure both analyses complement each other`
-        },
-        {
-          role: 'user',
-          content: `Please analyze these two reports and provide both the strategic market analysis and audience segment comparison:
-
-          ${brandName} Report:
-          ${text1}
-
-          ${competitorName} Report:
-          ${text2}
-
-          Follow the exact structure provided and ensure proper formatting for both analyses.`
-        }
-      ],
-      temperature: 0.7,
+    const response = await axios.post(API_URL, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
     });
 
-    return response.data.choices[0].message.content;
+    return response.data;
   } catch (error) {
     console.error('Error calling OpenAI API:', error);
     throw error;
