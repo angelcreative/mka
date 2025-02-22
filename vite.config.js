@@ -6,7 +6,11 @@ export default defineConfig({
   plugins: [react()],
   base: '/mka/',
   define: {
-    'import.meta.env.VITE_OPENAI_API_KEY': JSON.stringify(process.env.VITE_OPENAI_API_KEY)
+    'import.meta.env': JSON.stringify({
+      VITE_OPENAI_API_KEY: process.env.VITE_OPENAI_API_KEY,
+      MODE: process.env.NODE_ENV,
+      DEV: process.env.NODE_ENV !== 'production'
+    })
   },
   build: {
     outDir: 'dist',

@@ -25,6 +25,11 @@ const openai = axios.create({
 // Añadir log para debug
 console.log('API URL:', API_URL);
 console.log('API Key exists:', !!import.meta.env.VITE_OPENAI_API_KEY);
+console.log('API Key length:', import.meta.env.VITE_OPENAI_API_KEY?.length);
+console.log('Headers:', {
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY?.slice(0,10)}...`
+});
 
 const extractTextFromPdf = async (pdfData) => {
   try {
