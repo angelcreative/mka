@@ -1,14 +1,113 @@
 import React from 'react';
-import { FiPrinter, FiCopy } from 'react-icons/fi';
+import { FiPrinter, FiCopy, FiBarChart2 } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { Doughnut, Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+
+ChartJS.register(
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const AnalysisCard = ({ title, content, onPrint, onCopy, className = '' }) => {
+  const [showChart, setShowChart] = React.useState(false);
+  const chartRef = React.useRef(null);
+
+  const parseTableData = (content) => {
+    const rows = content.split('\n').filter(row => row.includes('|'));
+    if (rows.length < 3) return null;
+
+    const headers = rows[0].split('|').filter(Boolean).map(h => h.trim());
+    const data = rows.slice(2).map(row => 
+      row.split('|').filter(Boolean).map(cell => 
+        parseFloat(cell.trim().replace('%', '')) || 0
+      )
+    );
+
+    return { headers, data };
+  };
+
+  const renderChart = () => {
+    const tableData = parseTableData(content);
+    if (!tableData) return null;
+
+    const { headers, data } = tableData;
+    
+    if (title.toLowerCase().includes('affinity')) {
+      return (
+        <Bar
+          data={{
+            labels: data.map(row => row[0]),
+            datasets: headers.slice(1).map((header, i) => ({
+              label: header,
+              data: data.map(row => row[i + 1]),
+              backgroundColor: i === 0 ? 'rgba(31, 31, 31, 0.8)' : 'rgba(75, 75, 75, 0.8)',
+            }))
+          }}
+          options={{
+            responsive: true,
+            plugins: {
+              legend: { position: 'top' },
+              title: { display: true, text: title }
+            }
+          }}
+        />
+      );
+    }
+
+    return (
+      <Doughnut
+        data={{
+          labels: data.map(row => row[0]),
+          datasets: [{
+            data: data.map(row => row[1]),
+            backgroundColor: [
+              'rgba(31, 31, 31, 0.8)',
+              'rgba(75, 75, 75, 0.8)',
+              'rgba(120, 120, 120, 0.8)',
+            ],
+          }]
+        }}
+        options={{
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: title }
+          }
+        }}
+      />
+    );
+  };
+
   return (
     <div className={`bg-white rounded-lg shadow-sm p-6 ${className}`}>
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
         <div className="flex gap-2">
+          {parseTableData(content) && (
+            <button
+              onClick={() => setShowChart(!showChart)}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              title="Toggle Chart"
+            >
+              <FiBarChart2 className={`w-5 h-5 ${showChart ? 'text-[#1f1f1f]' : 'text-gray-600'}`} />
+            </button>
+          )}
           <button 
             onClick={onPrint}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -25,6 +124,11 @@ const AnalysisCard = ({ title, content, onPrint, onCopy, className = '' }) => {
           </button>
         </div>
       </div>
+      {showChart && (
+        <div className="mb-6">
+          {renderChart()}
+        </div>
+      )}
       <div className="prose max-w-none">
         <ReactMarkdown 
           remarkPlugins={[remarkGfm]}

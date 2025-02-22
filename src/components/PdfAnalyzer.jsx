@@ -180,26 +180,45 @@ function PdfAnalyzer() {
           <div className="mt-8">
             <h2 className="text-2xl font-bold mb-4">Analysis Results</h2>
             <AnalysisResults results={analysis} />
-            <button
-              onClick={() => setShowChat(true)}
-              className="mt-4 flex items-center space-x-2 text-purple-600 mx-auto"
-            >
-              <MdChat />
-              <span>Ask questions about the analysis</span>
-            </button>
           </div>
         )}
 
+        {/* Floating Ask AI Button */}
+        {analysis && !showChat && (
+          <button
+            onClick={() => setShowChat(true)}
+            className="fixed bottom-6 right-6 bg-[#1f1f1f] text-white px-4 py-3 rounded-full 
+                     shadow-lg flex items-center space-x-2 hover:bg-gray-800 transition-colors"
+          >
+            <MdChat className="w-5 h-5" />
+            <span>Ask AI</span>
+          </button>
+        )}
+
         {showChat && (
-          <div className="bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto space-y-4">
-            <div className="h-64 overflow-y-auto space-y-4 pr-4">
+          <div className="fixed bottom-6 right-6 w-96 bg-white rounded-lg shadow-lg overflow-hidden">
+            {/* Chat Header */}
+            <div className="bg-[#1f1f1f] text-white p-4 flex justify-between items-center">
+              <h3 className="font-semibold">AI Assistant</h3>
+              <button 
+                onClick={() => setShowChat(false)}
+                className="text-gray-300 hover:text-white"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            {/* Chat Messages */}
+            <div className="h-96 overflow-y-auto p-4 space-y-4">
               {chatMessages.map((message, index) => (
                 <div
                   key={index}
                   className={`p-4 rounded-xl ${
                     message.role === 'user' 
-                      ? 'bg-[#1f1f1f] text-white ml-auto' 
-                      : 'bg-gray-100'
+                      ? 'bg-[#1f1f1f] text-white ml-auto max-w-[80%]' 
+                      : 'bg-gray-100 text-gray-800 max-w-[80%]'
                   } max-w-[80%] prose`}
                 >
                   <ReactMarkdown>{message.content}</ReactMarkdown>
@@ -215,7 +234,9 @@ function PdfAnalyzer() {
                 </div>
               )}
             </div>
-            <div className="flex items-center space-x-3 pt-4 border-t border-gray-200">
+
+            {/* Chat Input */}
+            <div className="border-t border-gray-200 p-4 bg-gray-50">
               <div className="flex-1 relative">
                 <input
                   type="text"
@@ -223,15 +244,18 @@ function PdfAnalyzer() {
                   onChange={(e) => setUserMessage(e.target.value)}
                   placeholder="Ask a question..."
                   disabled={isTyping}
-                  className="w-full p-4 pr-12 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1f1f1f] focus:border-transparent disabled:bg-gray-100 text-gray-700 placeholder-gray-400"
+                  className="w-full p-3 pr-10 bg-white border border-gray-300 rounded-lg 
+                           focus:outline-none focus:ring-2 focus:ring-[#1f1f1f] focus:border-transparent 
+                           disabled:bg-gray-100 text-gray-800 placeholder-gray-400"
                   onKeyPress={(e) => e.key === 'Enter' && !isTyping && sendMessage()}
                 />
                 {!isTyping && userMessage.trim() && (
                   <button
                     onClick={sendMessage}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 text-[#1f1f1f] hover:text-gray-700"
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 
+                             text-[#1f1f1f] hover:text-gray-700 transition-colors"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                     </svg>
                   </button>
