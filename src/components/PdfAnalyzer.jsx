@@ -168,31 +168,31 @@ function PdfAnalyzer() {
         )}
 
         {showChat && (
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-3xl mx-auto space-y-4">
+          <div className="bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto space-y-4">
             <div className="h-64 overflow-y-auto space-y-4 pr-4">
               {chatMessages.map((message, index) => (
                 <div
                   key={index}
                   className={`p-4 rounded-xl ${
                     message.role === 'user' 
-                      ? 'bg-purple-100 ml-auto' 
-                      : 'bg-purple-50'
-                  } max-w-[80%] prose prose-purple`}
+                      ? 'bg-[#1f1f1f] text-white ml-auto' 
+                      : 'bg-gray-100'
+                  } max-w-[80%] prose`}
                 >
                   <ReactMarkdown>{message.content}</ReactMarkdown>
                 </div>
               ))}
               {isTyping && (
                 <div className="flex">
-                  <div className="bg-purple-50 rounded-xl p-3 flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                    <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                    <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                  <div className="bg-gray-100 rounded-xl p-3 flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-[#1f1f1f] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                    <div className="w-2 h-2 bg-[#1f1f1f] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-2 h-2 bg-[#1f1f1f] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                   </div>
                 </div>
               )}
             </div>
-            <div className="flex items-center space-x-3 pt-4 border-t border-purple-100">
+            <div className="flex items-center space-x-3 pt-4 border-t border-gray-200">
               <div className="flex-1 relative">
                 <input
                   type="text"
@@ -200,13 +200,13 @@ function PdfAnalyzer() {
                   onChange={(e) => setUserMessage(e.target.value)}
                   placeholder="Ask a question..."
                   disabled={isTyping}
-                  className="w-full p-4 pr-12 bg-purple-50 border border-purple-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:bg-purple-100 text-gray-700 placeholder-purple-400"
+                  className="w-full p-4 pr-12 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1f1f1f] focus:border-transparent disabled:bg-gray-100 text-gray-700 placeholder-gray-400"
                   onKeyPress={(e) => e.key === 'Enter' && !isTyping && sendMessage()}
                 />
                 {!isTyping && userMessage.trim() && (
                   <button
                     onClick={sendMessage}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 text-purple-600 hover:text-purple-700"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 text-[#1f1f1f] hover:text-gray-700"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
