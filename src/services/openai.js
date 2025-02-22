@@ -9,7 +9,7 @@ PDFJS.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const API_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://api.openai.com/v1/chat/completions'  // URL real de OpenAI API
+  ? 'https://api.openai.com/v1/chat/completions'
   : 'http://localhost:3000/api/openai';
 
 const MODEL = 'gpt-4-0125-preview';
@@ -18,9 +18,13 @@ const openai = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
+    'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
   },
 });
+
+// Añadir log para debug
+console.log('API URL:', API_URL);
+console.log('API Key exists:', !!import.meta.env.VITE_OPENAI_API_KEY);
 
 const extractTextFromPdf = async (pdfData) => {
   try {
@@ -104,7 +108,7 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
     const response = await axios.post(API_URL, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
+        'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
       }
     });
 
