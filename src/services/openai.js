@@ -14,15 +14,6 @@ const API_URL = process.env.NODE_ENV === 'production'
 
 const MODEL = 'gpt-4-0125-preview';
 
-const getApiKey = () => {
-  // En desarrollo
-  if (import.meta.env.DEV) {
-    return import.meta.env.VITE_OPENAI_API_KEY;
-  }
-  // En producción
-  return window.__OPENAI_API_KEY__;
-};
-
 const openai = axios.create({
   baseURL: API_URL,
   headers: {
@@ -113,6 +104,7 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
     const response = await axios.post(API_URL, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
       }
     });
 
