@@ -13,7 +13,7 @@ export default defineConfig({
       input: path.resolve(__dirname, 'index.html'),
       output: {
         entryFileNames: (chunkInfo) => {
-          if (chunkInfo.name === 'main') {
+          if (chunkInfo.name === 'index') {
             return 'src/main.js';
           }
           return 'assets/[name].[hash].js';
