@@ -59,7 +59,7 @@ const AnalysisResults = ({ results }) => {
   const sections = analysisText.split('###').filter(Boolean).map(section => {
     const [title, ...content] = section.trim().split('\n');
     return {
-      title: title.trim() || 'Analysis Section',
+      title: title.trim().replace(/^#+\s*/, '') || '📋 Analysis Section',
       content: content.join('\n').trim() || 'No content available'
     };
   });
