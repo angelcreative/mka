@@ -2,7 +2,7 @@ function Footer() {
   return (
     <footer className="bg-white py-16 mt-20">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Logo y descripción */}
           <div className="space-y-4">
             <img 
@@ -13,6 +13,19 @@ function Footer() {
             <p className="text-text-tertiary text-sm">
               Transform audience research into actionable insights. Understand what inspires your audience, moves them, and influences them.
             </p>
+          </div>
+
+          {/* Resources */}
+          <div>
+            <h4 className="text-primary-600 font-semibold mb-4">Resources</h4>
+            <ul className="space-y-2">
+              <li><a href="https://resources.audiense.com" target="_blank" rel="noopener noreferrer" className="text-text-secondary text-sm hover:text-primary-600">Blog</a></li>
+              <li><a href="https://www.audiense.com/why-audiense" target="_blank" rel="noopener noreferrer" className="text-text-secondary text-sm hover:text-primary-600">Why Audiense</a></li>
+              <li><a href="https://resources.audiense.com/affiliates" target="_blank" rel="noopener noreferrer" className="text-text-secondary text-sm hover:text-primary-600">Become an Affiliate</a></li>
+              <li><a href="https://resources.audiense.com/audiense-knowledge-base" target="_blank" rel="noopener noreferrer" className="text-text-secondary text-sm hover:text-primary-600">Knowledge Base</a></li>
+              <li><a href="https://status.audiense.com/" target="_blank" rel="noopener noreferrer" className="text-text-secondary text-sm hover:text-primary-600">Audiense Status</a></li>
+              <li><a href="https://www.audiense.com/research-and-development" target="_blank" rel="noopener noreferrer" className="text-text-secondary text-sm hover:text-primary-600">R+D</a></li>
+            </ul>
           </div>
 
           {/* Productos */}
