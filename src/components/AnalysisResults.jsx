@@ -32,6 +32,17 @@ const AnalysisCard = ({ title, content, onPrint, onCopy, className = '' }) => {
     const rows = content.split('\n').filter(row => row.includes('|'));
     if (rows.length < 3) return null;
 
+    // Verificar si hay datos numéricos válidos
+    const hasValidData = rows.slice(2).some(row => {
+      const cells = row.split('|').filter(Boolean);
+      return cells.slice(1).some(cell => {
+        const val = cell.trim();
+        return !isNaN(parseFloat(val)) && val !== '-' && val !== 'N/A';
+      });
+    });
+
+    if (!hasValidData) return null;
+
     const headers = rows[0].split('|')
       .filter(Boolean)
       .map(h => h.trim());
@@ -247,24 +258,6 @@ const AnalysisResults = ({ results }) => {
     !section.content.toLowerCase().includes('no content available')
   );
 
-  // Agrupar las secciones por tipo
-  const groupedSections = validSections.reduce((acc, section) => {
-    const isFullWidth = section.title.toLowerCase().includes('overlap') || 
-                        section.title.toLowerCase().includes('affinity');
-    if (isFullWidth) {
-      acc.fullWidth.push(section);
-    } else {
-      acc.regular.push(section);
-    }
-    return acc;
-  }, { fullWidth: [], regular: [] });
-  
-  // Si hay un número impar de secciones regulares, la última ocupa todo el ancho
-  if (groupedSections.regular.length % 2 !== 0) {
-    const lastSection = groupedSections.regular.pop();
-    groupedSections.fullWidth.push(lastSection);
-  }
-
   if (sections.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
@@ -302,7 +295,7 @@ const AnalysisResults = ({ results }) => {
 
   return (
     <div className="grid grid-cols-1 gap-6">
-      {[...groupedSections.fullWidth, ...groupedSections.regular].map((section, index) => (
+      {validSections.map((section, index) => (
         <AnalysisCard
           key={index}
           title={section.title}
