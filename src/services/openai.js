@@ -108,95 +108,66 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
       messages: [
         {
           role: 'system',
-          content: `You are a senior market strategist analyzing ${brand1} and ${brand2} audience data.
+          content: `You are a market conquest strategist analyzing ${brand1} and ${brand2} audience data. Your goal is to help ${brand1} capture ${brand2}'s market share.
           
-          Structure your analysis with these key sections using markdown:
+          1. Segment Overlap Analysis
+          | Segment | ${brand1} (%) | ${brand2} (%) | Overlap Impact |
+          |---------|---------------|---------------|----------------|
+          | Core Fans | 35.2 | 42.8 | High - Primary target |
+          | Content Creators | 12.5 | 28.4 | Medium - Growth opportunity |
+          | Early Adopters | 8.3 | 15.7 | High - Strategic value |
+
+          2. Segment Distribution
+          | Category | Current Share | Growth Rate | Position |
+          |----------|--------------|-------------|----------|
+          | Premium Users | 28% | +15% YoY | Challenger |
+          | Active Engagers | 45% | +22% YoY | Leader |
           
-          1. Market Share Analysis
-          | Segment | ${brand1} (%) | ${brand2} (%) | Market Share Gap |
-          |---------|---------------|---------------|------------------|
-          
-          2. Growth Metrics
-          | Metric | Current (%) | Target (%) | Growth Potential |
-          |--------|-------------|------------|------------------|
-          
-          3. Growth Strategy
+          3. Growth Opportunities
           | Segment | Current Share | Target Share | Growth Strategy |
           |---------|--------------|--------------|-----------------|
-          
-          4. Audience Performance Metrics
+          | Young Professionals | 18.5% | 35% | Premium features + Social proof |
+          | Content Creators | 12.5% | 30% | Creator tools & monetization |
+
+          4. Quantitative Metrics Table
           | Metric | ${brand1} | ${brand2} | Gap/Opportunity |
-          |--------|-----------|-----------|-----------------|
-          Key Metrics to Compare:
-          - Engagement Rate (%)
-          - Content Interaction (%)
-          - Platform Activity (%)
-          - Growth Velocity (%)
-          - Retention Rate (%)
-          - Cross-platform Presence (%)
+          |--------|-----------|-----------|----------------|
+          | Engagement Rate | 3.2% | 4.8% | +1.6% to close |
+          | Retention Rate | 68% | 72% | +4% to match |
+          | Growth Velocity | 15% | 22% | +7% acceleration needed |
+
+          5. Qualitative Value Assessment
+          | Aspect | ${brand1} | ${brand2} | Strategic Implications |
+          |--------|-----------|-----------|----------------------|
+          | Brand Loyalty | Medium-High | Very High | Need stronger community features |
+          | Content Quality | Premium | Mixed | Leverage quality advantage |
+
+          6. Market Position Analysis
+          - Current market dynamics
+          - Competitive advantages
+          - Key differentiators
+          - Strategic opportunities
           
-          5. Competitive Advantages
-          | Category | ${brand1} Score | ${brand2} Score | Advantage |
-          |----------|----------------|----------------|-----------|
-          
-          6. Brand Perception
-          | Dimension | ${brand1} | ${brand2} | Key Differentiators |
-          |-----------|-----------|-----------|-------------------|
-          Include:
-          - Brand values alignment
-          - Content quality perception
-          - Platform experience
-          - Community sentiment
-          
-          7. Customer Loyalty Analysis
-          | Metric | ${brand1} (%) | ${brand2} (%) | Loyalty Gap |
-          |--------|---------------|---------------|-------------|
-          
-          Loyalty Insights:
-          - Deep dive into emotional factors
-          - Key loyalty drivers by segment
-          - Brand perception analysis
-          - Community belonging factors
-          - Content resonance patterns
-          
-          8. Conversion Analysis
-          | Funnel Stage | ${brand1} (%) | ${brand2} (%) | Optimization |
-          |--------------|---------------|---------------|--------------|
-          
-          Conversion Insights:
-          - Customer pain points
-          - Unmet needs and gaps
-          - High-potential segments
-          - Content consumption patterns
-          - Platform interaction styles
-          
-          9. Strategic Recommendations
-          | Initiative | Impact | Effort | Timeline | Priority |
-          |------------|--------|--------|----------|----------|
-          
-          Action Plan:
-          - Segment-specific strategies
-          - Value proposition enhancements
-          - Customer journey optimization
-          - Content strategy alignment
-          - Community building tactics
-          
+          7. Behavioral Insights
+          | Behavior | ${brand1} | ${brand2} | Action Points |
+          |----------|-----------|-----------|---------------|
+          | Daily Usage | 42 mins | 58 mins | Increase engagement hooks |
+          | Content Creation | 15% | 25% | Simplify creation tools |
+
+          8. Strategic Recommendations
+          | Initiative | Impact | Priority | Timeline |
+          |------------|--------|----------|----------|
+          | Creator Program | High (+25% growth) | P0 | Q2 2024 |
+          | Community Features | Medium (+15% retention) | P1 | Q3 2024 |
+
           Guidelines:
-          - Present all available metrics as percentages
-          - Include specific market share numbers
-          - Show growth rates and trends
-          - Quantify gaps and opportunities
-          - Use consistent numerical formats
-          - Focus on actionable insights
-          - Include relevant data points
-          - Ensure segments have clear metrics
-          - Highlight competitive advantages
-          - Balance data with qualitative insights
-          - Consider cultural factors
-          - Analyze content-audience fit
-          - Evaluate community dynamics
+          - Focus on conquest opportunities
+          - Quantify all possible metrics
+          - Identify clear competitive advantages
+          - Highlight actionable growth strategies
+          - Show specific market capture tactics
           
-          Focus your analysis on comparing the audience reports.`
+          Provide detailed analysis comparing the reports with focus on market conquest opportunities.`
         },
         {
           role: 'user',
