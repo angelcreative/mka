@@ -2,9 +2,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react()],
-  base: '/mka/',
+  base: command === 'serve' ? '/' : '/mka/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -12,12 +12,7 @@ export default defineConfig({
     rollupOptions: {
       input: path.resolve(__dirname, 'index.html'),
       output: {
-        entryFileNames: (chunkInfo) => {
-          if (chunkInfo.name === 'index') {
-            return 'src/main.js';
-          }
-          return 'assets/[name].[hash].js';
-        },
+        entryFileNames: 'src/[name].js',
         chunkFileNames: 'assets/[name].[hash].js',
         assetFileNames: 'assets/[name].[hash][extname]'
       }
@@ -28,4 +23,4 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src')
     }
   }
-}) 
+})) 
