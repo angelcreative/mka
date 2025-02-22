@@ -113,17 +113,16 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
           When responding, always structure your answers using proper markdown:
           
           - Use tables when comparing segments
-          - Use headers for sections (use ### but the title should not include the #)
-          - Use emojis at the start of each section title (e.g. ### 📊 Audience Overview)
-          - Some suggested emojis:
-            📊 for data/metrics
-            👥 for audience segments
-            🎯 for targeting insights
-            💡 for recommendations
-            📈 for trends
-            🔍 for analysis
-            ⭐ for key findings
+          - Use headers for sections (use ### followed by the title without #)
+          - Use emojis only for audience segments and interests in the content
           - Use bullet points for lists
+          
+          Example format:
+          ### Audience Overview
+          Content here...
+          
+          ### Top Interests
+          Content with emojis for segments...
           
           Focus your analysis on comparing the audience reports.`
         },
