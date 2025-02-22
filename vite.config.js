@@ -5,6 +5,9 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   base: '/mka/',
+  define: {
+    'import.meta.env.VITE_OPENAI_API_KEY': JSON.stringify(process.env.VITE_OPENAI_API_KEY)
+  },
   build: {
     outDir: 'dist',
     assetsDir: 'assets',

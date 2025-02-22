@@ -9,7 +9,7 @@ PDFJS.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const API_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://api.example.com/api/openai'  // Necesitamos una URL real del backend
+  ? 'https://api.openai.com/v1/chat/completions'  // URL real de OpenAI API
   : 'http://localhost:3000/api/openai';
 
 const MODEL = 'gpt-4-0125-preview';
@@ -27,6 +27,7 @@ const openai = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
   },
 });
 
