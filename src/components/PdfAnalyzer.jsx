@@ -191,7 +191,7 @@ function PdfAnalyzer() {
                      shadow-lg flex items-center space-x-2 hover:bg-gray-800 transition-colors"
           >
             <MdChat className="w-5 h-5" />
-            <span>Ask AI</span>
+            <span>Ask Boty</span>
           </button>
         )}
 
@@ -199,10 +199,10 @@ function PdfAnalyzer() {
           <div className="fixed bottom-6 right-6 w-96 bg-white rounded-lg shadow-lg overflow-hidden">
             {/* Chat Header */}
             <div className="bg-[#1f1f1f] text-white p-4 flex justify-between items-center">
-              <h3 className="font-semibold">AI Assistant</h3>
+              <h3 className="font-semibold">I'm Boty your AI Audiense assistant</h3>
               <button 
                 onClick={() => setShowChat(false)}
-                className="text-gray-300 hover:text-white"
+                className="text-white hover:text-gray-200 transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -211,14 +211,14 @@ function PdfAnalyzer() {
             </div>
             
             {/* Chat Messages */}
-            <div className="h-96 overflow-y-auto p-4 space-y-4">
+            <div className="h-96 overflow-y-auto p-4 space-y-4 bg-[#f8fafc]">
               {chatMessages.map((message, index) => (
                 <div
                   key={index}
                   className={`p-4 rounded-xl ${
                     message.role === 'user' 
-                      ? 'bg-[#1f1f1f] text-white ml-auto max-w-[80%]' 
-                      : 'bg-gray-100 text-gray-800 max-w-[80%]'
+                      ? 'bg-[#1f1f1f] text-white ml-auto max-w-[80%] shadow-md' 
+                      : 'bg-white text-gray-800 border border-gray-200 max-w-[80%] shadow-md'
                   } max-w-[80%] prose`}
                 >
                   <ReactMarkdown>{message.content}</ReactMarkdown>
@@ -226,7 +226,7 @@ function PdfAnalyzer() {
               ))}
               {isTyping && (
                 <div className="flex">
-                  <div className="bg-gray-100 rounded-xl p-3 flex items-center space-x-2">
+                  <div className="bg-white border border-gray-200 rounded-xl p-3 flex items-center space-x-2 shadow-md">
                     <div className="w-2 h-2 bg-[#1f1f1f] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                     <div className="w-2 h-2 bg-[#1f1f1f] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
                     <div className="w-2 h-2 bg-[#1f1f1f] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
@@ -236,7 +236,7 @@ function PdfAnalyzer() {
             </div>
 
             {/* Chat Input */}
-            <div className="border-t border-gray-200 p-4 bg-gray-50">
+            <div className="border-t border-gray-200 p-4 bg-white">
               <div className="flex-1 relative">
                 <input
                   type="text"
@@ -245,15 +245,16 @@ function PdfAnalyzer() {
                   placeholder="Ask a question..."
                   disabled={isTyping}
                   className="w-full p-3 pr-10 bg-white border border-gray-300 rounded-lg 
-                           focus:outline-none focus:ring-2 focus:ring-[#1f1f1f] focus:border-transparent 
-                           disabled:bg-gray-100 text-gray-800 placeholder-gray-400"
+                           focus:outline-none focus:ring-2 focus:ring-[#1f1f1f] focus:border-transparent
+                           disabled:bg-gray-100 text-gray-800 placeholder-gray-600
+                           shadow-sm"
                   onKeyPress={(e) => e.key === 'Enter' && !isTyping && sendMessage()}
                 />
                 {!isTyping && userMessage.trim() && (
                   <button
                     onClick={sendMessage}
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 
-                             text-[#1f1f1f] hover:text-gray-700 transition-colors"
+                             text-[#1f1f1f] hover:text-gray-600 transition-colors"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
