@@ -4,6 +4,7 @@ import { HiSparkles } from 'react-icons/hi';
 import { analyzePdfs, chatWithAI } from '@/services/openai';
 import ReactMarkdown from 'react-markdown';
 import { ButtonSpinner } from './Loaders';
+import AnalysisResults from './AnalysisResults';
 
 function PdfAnalyzer() {
   const [files, setFiles] = useState({ pdf1: null, pdf2: null });
@@ -147,19 +148,9 @@ function PdfAnalyzer() {
 
         {/* Analysis Results & Chat Section */}
         {analysis && (
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-5xl mx-auto">
-            <h3 className="font-bold text-lg text-gray-800 mb-3">Analysis Results</h3>
-            <div 
-              className="prose prose-purple max-w-none"
-              dangerouslySetInnerHTML={{ __html: analysis.summary }}
-            />
-            <button
-              onClick={() => setShowChat(true)}
-              className="mt-4 flex items-center space-x-2 text-purple-600 mx-auto"
-            >
-              <MdChat />
-              <span>Ask questions about the analysis</span>
-            </button>
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold mb-4">Analysis Results</h2>
+            <AnalysisResults results={analysis} />
           </div>
         )}
 
