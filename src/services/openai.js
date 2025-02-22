@@ -9,7 +9,7 @@ PDFJS.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 const API_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://mka-backend.vercel.app/api/openai'
+  ? 'https://api.openai.com/v1/chat/completions'
   : 'http://localhost:3000/api/openai';
 
 const MODEL = 'gpt-4-0125-preview';
@@ -18,6 +18,7 @@ const openai = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
   },
 });
 
