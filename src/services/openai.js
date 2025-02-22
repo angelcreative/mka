@@ -112,21 +112,19 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
           
           Structure your analysis with these key sections using markdown:
           
-          1. Segment Overlap Analysis
-          A. Direct Overlap Table:
-          | Segment | ${brand1} (%) | ${brand2} (%) | Overlap Impact |
-          |---------|---------------|---------------|----------------|
+          1. Market Share Analysis
+          | Segment | ${brand1} (%) | ${brand2} (%) | Market Share Gap |
+          |---------|---------------|---------------|------------------|
           
-          B. Segment Distribution:
-          | Category | ${brand1} Share | ${brand2} Share | Market Position |
-          |----------|----------------|----------------|-----------------|
+          2. Growth Metrics
+          | Metric | Current (%) | Target (%) | Growth Potential |
+          |--------|-------------|------------|------------------|
           
-          C. Growth Opportunities:
+          3. Growth Strategy
           | Segment | Current Share | Target Share | Growth Strategy |
           |---------|--------------|--------------|-----------------|
           
-          2. Audience Value Analysis
-          A. Quantitative Metrics Table:
+          4. Audience Performance Metrics
           | Metric | ${brand1} | ${brand2} | Gap/Opportunity |
           |--------|-----------|-----------|-----------------|
           Key Metrics to Compare:
@@ -137,59 +135,46 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
           - Retention Rate (%)
           - Cross-platform Presence (%)
           
-          B. Qualitative Value Assessment:
-          | Aspect | ${brand1} | ${brand2} | Strategic Implications |
-          |--------|-----------|-----------|----------------------|
-          Analyze:
-          - Content preferences
-          - Behavioral patterns
-          - Cultural alignment
-          - Community engagement
+          5. Competitive Advantages
+          | Category | ${brand1} Score | ${brand2} Score | Advantage |
+          |----------|----------------|----------------|-----------|
           
-          3. Competitive Position Matrix
-          A. Market Position Table:
-          | Category | ${brand1} Strength | ${brand2} Strength | Market Opportunity |
-          |----------|-------------------|-------------------|-------------------|
-          
-          B. Brand Perception Analysis:
-          | Dimension | ${brand1} Perception | ${brand2} Perception | Key Differentiators |
-          |-----------|---------------------|---------------------|-------------------|
+          6. Brand Perception
+          | Dimension | ${brand1} | ${brand2} | Key Differentiators |
+          |-----------|-----------|-----------|-------------------|
           Include:
           - Brand values alignment
           - Content quality perception
           - Platform experience
           - Community sentiment
           
-          4. Customer Loyalty Analysis
-          A. Loyalty Drivers Table:
-          | Driver | ${brand1} Impact | ${brand2} Impact | Retention Opportunity |
-          |--------|----------------|----------------|---------------------|
+          7. Customer Loyalty Analysis
+          | Metric | ${brand1} (%) | ${brand2} (%) | Loyalty Gap |
+          |--------|---------------|---------------|-------------|
           
-          B. Qualitative Insights:
-          - Deep dive into emotional and practical factors
+          Loyalty Insights:
+          - Deep dive into emotional factors
           - Key loyalty drivers by segment
           - Brand perception analysis
           - Community belonging factors
           - Content resonance patterns
           
-          5. Conversion Opportunities
-          A. Conversion Potential Matrix:
-          | Segment | Current State | Target State | Action Points |
-          |---------|--------------|--------------|---------------|
+          8. Conversion Analysis
+          | Funnel Stage | ${brand1} (%) | ${brand2} (%) | Optimization |
+          |--------------|---------------|---------------|--------------|
           
-          B. Behavioral Analysis:
+          Conversion Insights:
           - Customer pain points
           - Unmet needs and gaps
-          - High-potential segments for conversion
+          - High-potential segments
           - Content consumption patterns
           - Platform interaction styles
           
-          6. Strategic Recommendations
-          A. Strategy Priority Matrix:
+          9. Strategic Recommendations
           | Initiative | Impact | Effort | Timeline | Priority |
           |------------|--------|--------|----------|----------|
           
-          B. Implementation Framework:
+          Action Plan:
           - Segment-specific strategies
           - Value proposition enhancements
           - Customer journey optimization
@@ -197,16 +182,17 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
           - Community building tactics
           
           Guidelines:
+          - Present all available metrics as percentages
+          - Include specific market share numbers
+          - Show growth rates and trends
+          - Quantify gaps and opportunities
+          - Use consistent numerical formats
           - Focus on actionable insights
-          - Include only relevant data points
-          - Ensure all segments mentioned have clear metrics
-          - Avoid empty or low-value sections
-          - Use clear, business-focused language
-          - Present quantitative comparisons in tables
-          - Include market context and implications
-          - Highlight competitive advantages and gaps
+          - Include relevant data points
+          - Ensure segments have clear metrics
+          - Highlight competitive advantages
           - Balance data with qualitative insights
-          - Consider cultural and behavioral factors
+          - Consider cultural factors
           - Analyze content-audience fit
           - Evaluate community dynamics
           
