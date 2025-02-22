@@ -50,15 +50,27 @@ const AnalysisCard = ({ title, content, onPrint, onCopy }) => {
 };
 
 const AnalysisResults = ({ results }) => {
-  const analysisText = results?.summary || '';
+  if (!results || typeof results.summary !== 'string') {
+    console.error('Invalid results:', results);
+    return null;
+  }
 
+  const analysisText = results.summary;
   const sections = analysisText.split('###').filter(Boolean).map(section => {
     const [title, ...content] = section.trim().split('\n');
     return {
-      title: title.trim(),
-      content: content.join('\n').trim()
+      title: title.trim() || 'Analysis Section',
+      content: content.join('\n').trim() || 'No content available'
     };
   });
+
+  if (sections.length === 0) {
+    return (
+      <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
+        <ReactMarkdown>{analysisText}</ReactMarkdown>
+      </div>
+    );
+  }
 
   const handlePrint = (section) => {
     const printWindow = window.open('', '_blank');

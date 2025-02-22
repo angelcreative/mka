@@ -35,9 +35,15 @@ function PdfAnalyzer() {
     setLoading(true);
     try {
       const result = await analyzePdfs(files.pdf1, files.pdf2, brands.myBrand, brands.competitor);
-      setAnalysis({ summary: result });
+      if (result && typeof result === 'string') {
+        setAnalysis({ summary: result });
+      } else {
+        console.error('Invalid analysis result:', result);
+        setAnalysis({ summary: '' });
+      }
     } catch (error) {
       console.error('Error analyzing PDFs:', error);
+      setAnalysis({ summary: '' });
     }
     setLoading(false);
   };
