@@ -263,25 +263,25 @@ function PdfAnalyzer() {
 
             {/* Quick Actions */}
             <div className="p-4 border-b text-sm text-gray-600">
-              <p className="mb-2 font-medium text-gray-700">Sugerencias de preguntas:</p>
+              <p className="mb-2 font-medium text-gray-700">Question suggestions:</p>
               <div className="space-y-2">
-                <p>• "¿Cómo puedo conquistar el segmento de [nombre]?"</p>
-                <p>• "Compara los segmentos [segmento1] y [segmento2]"</p>
-                <p>• "¿Cuál es la mejor estrategia de crecimiento?"</p>
-                <p>• "Analiza el comportamiento del segmento [nombre]"</p>
-                <p>• "¿Qué oportunidades hay en [segmento]?"</p>
+                <p>• "How can I conquer the [name] segment?"</p>
+                <p>• "Compare segments [segment1] and [segment2]"</p>
+                <p>• "What's the best growth strategy?"</p>
+                <p>• "Analyze the behavior of [name] segment"</p>
+                <p>• "What opportunities exist in [segment]?"</p>
               </div>
             </div>
 
             {/* Chat Messages */}
-            <div className="flex-1 bg-gray-50 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 bg-[#f7f7f7] overflow-y-auto p-4 space-y-4">
               {chatMessages.map((message, index) => (
                 <div
                   key={index}
                   className={`max-w-[85%] ${
                     message.role === 'user' 
-                      ? 'bg-blue-50 text-gray-800 ml-auto' 
-                      : 'bg-gray-50 text-gray-800'
+                      ? 'bg-white text-gray-800 ml-auto shadow-sm' 
+                      : 'bg-white text-gray-800 shadow-sm'
                   } rounded-xl p-4 prose`}
                 >
                   <ReactMarkdown>{message.content}</ReactMarkdown>
@@ -289,7 +289,7 @@ function PdfAnalyzer() {
               ))}
               {isTyping && (
                 <div className="flex">
-                  <div className="bg-gray-50 rounded-xl p-3 flex items-center space-x-2">
+                  <div className="bg-white rounded-xl p-3 flex items-center space-x-2 shadow-sm">
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
