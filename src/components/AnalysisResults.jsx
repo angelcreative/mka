@@ -31,18 +31,7 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
     const rows = content.split('\n').filter(row => row.includes('|'));
     if (rows.length < 3) return null;
 
-    // Validación más robusta de datos
     try {
-      const hasValidData = rows.slice(2).some(row => {
-        const cells = row.split('|').filter(Boolean);
-        return cells.slice(1).some(cell => {
-          const val = cell.trim();
-          return !isNaN(parseFloat(val)) && val !== '-' && val !== 'N/A';
-        });
-      });
-
-      if (!hasValidData) return null;
-
       const headers = rows[0].split('|')
         .filter(Boolean)
         .map(h => h.trim());
@@ -52,21 +41,38 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
           .filter(Boolean)
           .map(cell => cell.trim());
         
-        if (cells.length < 2) return null; // Prevenir filas inválidas
+        if (cells.length < 2) return null;
+        
+        // Solo procesar valores que pueden ser convertidos a números
+        const numericValues = cells.slice(1).map(val => {
+          // Intentar extraer número de strings como "45.24%" o "75.00%"
+          const number = parseFloat(val.replace(/[^0-9.-]/g, ''));
+          return !isNaN(number) ? number : null;
+        });
+        
+        // Si no hay valores numéricos, omitir esta fila
+        if (numericValues.every(v => v === null)) return null;
         
         return {
           label: cells[0],
-          values: cells.slice(1).map(val => {
-            if (val === 'N/A' || val === '-') return 0;
-            const number = parseFloat(val.replace(/[^0-9.-]/g, ''));
-            return isNaN(number) ? 0 : number;
-          })
+          values: numericValues
         };
-      }).filter(Boolean); // Filtrar filas nulas
+      }).filter(Boolean);
 
-      if (data.length === 0) return null;
-
-      return { headers, data };
+      // Filtrar headers para mantener solo las columnas con datos numéricos
+      const numericHeaders = headers.slice(1).filter((_, i) => 
+        data.some(row => row.values[i] !== null)
+      );
+      
+      if (numericHeaders.length === 0 || data.length === 0) return null;
+      
+      return { 
+        headers: ['Segment', ...numericHeaders],
+        data: data.map(row => ({
+          label: row.label,
+          values: row.values.filter(v => v !== null)
+        }))
+      };
     } catch (error) {
       console.error('Error parsing table data:', error);
       return null;
