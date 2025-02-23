@@ -43,36 +43,43 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
         
         if (cells.length < 2) return null;
         
-        // Solo procesar valores que pueden ser convertidos a números
-        const numericValues = cells.slice(1).map(val => {
-          // Intentar extraer número de strings como "45.24%" o "75.00%"
+        // Procesar todos los valores numéricos (incluyendo porcentajes)
+        const values = cells.slice(1).map((val, index) => {
+          // Si es un porcentaje
+          if (val.includes('%')) {
+            return parseFloat(val.replace(/[^0-9.-]/g, ''));
+          }
+          // Si es un número sin porcentaje
           const number = parseFloat(val.replace(/[^0-9.-]/g, ''));
           return !isNaN(number) ? number : null;
         });
         
-        // Si no hay valores numéricos, omitir esta fila
-        if (numericValues.every(v => v === null)) return null;
-        
         return {
           label: cells[0],
-          values: numericValues
+          values: values
         };
       }).filter(Boolean);
 
-      // Filtrar headers para mantener solo las columnas con datos numéricos
-      const numericHeaders = headers.slice(1).filter((_, i) => 
-        data.some(row => row.values[i] !== null)
-      );
-      
-      if (numericHeaders.length === 0 || data.length === 0) return null;
-      
-      return { 
-        headers: ['Segment', ...numericHeaders],
+      // Identificar qué columnas tienen valores numéricos
+      const numericColumnIndexes = headers.slice(1).map((_, colIndex) => {
+        const hasNumericValues = data.some(row => row.values[colIndex] !== null);
+        return hasNumericValues ? colIndex : null;
+      }).filter(index => index !== null);
+
+      // Si no hay columnas numéricas, retornar null
+      if (numericColumnIndexes.length === 0) return null;
+
+      // Crear dataset solo con columnas numéricas
+      const numericHeaders = numericColumnIndexes.map(i => headers[i + 1]);
+      const chartData = {
+        headers: numericHeaders,
         data: data.map(row => ({
           label: row.label,
-          values: row.values.filter(v => v !== null)
+          values: numericColumnIndexes.map(i => row.values[i])
         }))
       };
+
+      return chartData;
     } catch (error) {
       console.error('Error parsing table data:', error);
       return null;
@@ -85,24 +92,19 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
 
     const { headers, data } = tableData;
     
-    if (!headers || headers.length < 2 || !data || data.length === 0) {
-      return null;
-    }
-
-    // Crear un mapa de colores consistente para cada tipo de dato
+    // Mapa de colores para diferentes tipos de datos
     const colorMap = {
-      'Size': 'rgba(59, 130, 246, 0.8)',    // Azul
-      'Share %': 'rgba(139, 92, 246, 0.8)', // Morado
+      'Size': 'rgba(59, 130, 246, 0.8)',      // Azul
       'Market Share': 'rgba(16, 185, 129, 0.8)', // Verde
-      'Category Size': 'rgba(245, 158, 11, 0.8)', // Naranja
-      'Penetration': 'rgba(239, 68, 68, 0.8)'    // Rojo
+      'Penetration': 'rgba(239, 68, 68, 0.8)',   // Rojo
+      'Share %': 'rgba(139, 92, 246, 0.8)'     // Morado
     };
 
     return (
       <Bar
         data={{
           labels: data.map(row => row.label),
-          datasets: headers.slice(1).map((header, i) => ({
+          datasets: headers.map((header, i) => ({
             label: header,
             data: data.map(row => row.values[i]),
             backgroundColor: colorMap[header] || `hsl(${i * 50}, 70%, 60%)`,
@@ -119,16 +121,14 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
               labels: {
                 usePointStyle: true,
                 padding: 20,
-                font: {
-                  size: 12
-                }
+                font: { size: 12 }
               }
             },
             tooltip: {
               callbacks: {
                 label: (context) => {
-                  const value = context.parsed.y;
                   const label = context.dataset.label;
+                  const value = context.parsed.y;
                   return `${label}: ${value}${label.includes('%') ? '%' : ''}`;
                 }
               }
@@ -139,7 +139,11 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
               beginAtZero: true,
               ticks: {
                 callback: function(value) {
-                  return value + (this.chart.data.datasets[0].label.includes('%') ? '%' : '');
+                  // Añadir % solo si alguno de los datasets es un porcentaje
+                  const isPercentage = this.chart.data.datasets.some(d => 
+                    d.label.includes('%')
+                  );
+                  return value + (isPercentage ? '%' : '');
                 }
               }
             }
