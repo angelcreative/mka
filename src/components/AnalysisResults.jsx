@@ -2,10 +2,9 @@ import React from 'react';
 import { FiPrinter, FiCopy, FiBarChart2 } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Doughnut, Bar } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
-  ArcElement,
   CategoryScale,
   LinearScale,
   BarElement,
@@ -13,14 +12,18 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-import { Chart } from 'chart.js';
-import { registerables } from 'chart.js';
 
-Chart.register(...registerables);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' }) => {
   const [showChart, setShowChart] = React.useState(false);
-  const chartRef = React.useRef(null);
 
   const parseTableData = (content) => {
     const rows = content.split('\n').filter(row => row.includes('|'));
@@ -56,13 +59,6 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
       };
     });
 
-    // Si todos los valores son 0, probablemente sean N/A
-    const allZeros = data.every(row => 
-      row.values.every(val => val === 0)
-    );
-    
-    if (allZeros) return null;
-
     return { headers, data };
   };
 
@@ -72,43 +68,39 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
 
     const { headers, data } = tableData;
     
-    // Asegurarse de que los datos sean válidos
-    if (!headers || !data || data.length === 0) return null;
+    const chartData = {
+      labels: data.map(row => row.label),
+      datasets: headers.slice(1).map((header, i) => ({
+        label: header,
+        data: data.map(row => row.values[i]),
+        backgroundColor: `rgba(${59 + (i * 40)}, ${130 + (i * 40)}, 246, 0.8)`,
+        borderColor: '#ffffff',
+        borderWidth: 1
+      }))
+    };
+
+    const chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+      plugins: {
+        legend: {
+          position: 'top'
+        },
+        tooltip: {
+          callbacks: {
+            label: (context) => `${context.dataset.label}: ${context.parsed.y}`
+          }
+        }
+      }
+    };
 
     return (
-      <Bar
-        data={{
-          labels: data.map(row => row.label),
-          datasets: headers.slice(1).map((header, i) => ({
-            label: header,
-            data: data.map(row => row.values[i]),
-            backgroundColor: [
-              'rgba(59, 130, 246, 0.8)',
-              'rgba(99, 102, 241, 0.8)',
-              'rgba(139, 92, 246, 0.8)'
-            ],
-            borderColor: '#ffffff',
-            borderWidth: 1
-          }))
-        }}
-        options={{
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          },
-          plugins: {
-            legend: { position: 'top' },
-            tooltip: {
-              callbacks: {
-                label: (context) => `${context.dataset.label}: ${context.parsed.y}%`
-              }
-            }
-          }
-        }}
-      />
+      <Bar data={chartData} options={chartOptions} />
     );
   };
 
