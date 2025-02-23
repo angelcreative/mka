@@ -2,9 +2,10 @@ import React from 'react';
 import { FiPrinter, FiCopy, FiBarChart2 } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Bar } from 'react-chartjs-2';
+import { Doughnut, Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
+  ArcElement,
   CategoryScale,
   LinearScale,
   BarElement,
@@ -14,6 +15,7 @@ import {
 } from 'chart.js';
 
 ChartJS.register(
+  ArcElement,
   CategoryScale,
   LinearScale,
   BarElement,
@@ -24,6 +26,7 @@ ChartJS.register(
 
 const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' }) => {
   const [showChart, setShowChart] = React.useState(false);
+  const chartRef = React.useRef(null);
 
   const parseTableData = (content) => {
     const rows = content.split('\n').filter(row => row.includes('|'));
@@ -59,6 +62,13 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
       };
     });
 
+    // Si todos los valores son 0, probablemente sean N/A
+    const allZeros = data.every(row => 
+      row.values.every(val => val === 0)
+    );
+    
+    if (allZeros) return null;
+
     return { headers, data };
   };
 
@@ -68,39 +78,42 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
 
     const { headers, data } = tableData;
     
-    const chartData = {
-      labels: data.map(row => row.label),
-      datasets: headers.slice(1).map((header, i) => ({
-        label: header,
-        data: data.map(row => row.values[i]),
-        backgroundColor: `rgba(${59 + (i * 40)}, ${130 + (i * 40)}, 246, 0.8)`,
-        borderColor: '#ffffff',
-        borderWidth: 1
-      }))
-    };
-
-    const chartOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      },
-      plugins: {
-        legend: {
-          position: 'top'
-        },
-        tooltip: {
-          callbacks: {
-            label: (context) => `${context.dataset.label}: ${context.parsed.y}`
-          }
-        }
-      }
-    };
+    // Solo mostrar el botón de gráfica cuando hay datos numéricos válidos
+    const hasNumericData = data.some(row => 
+      row.values.some(val => !isNaN(parseFloat(val)) && val !== 0)
+    );
+    
+    if (!hasNumericData) return null;
 
     return (
-      <Bar data={chartData} options={chartOptions} />
+      <Bar
+        data={{
+          labels: data.map(row => row.label),
+          datasets: headers.slice(1).map((header, i) => ({
+            label: header,
+            data: data.map(row => row.values[i]),
+            backgroundColor: [
+              'rgba(59, 130, 246, 0.8)',
+              'rgba(99, 102, 241, 0.8)',
+              'rgba(139, 92, 246, 0.8)'
+            ],
+            borderColor: '#ffffff',
+            borderWidth: 1
+          }))
+        }}
+        options={{
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+              callbacks: {
+                label: (context) => `${context.dataset.label}: ${context.parsed.y}%`
+              }
+            }
+          }
+        }}
+      />
     );
   };
 
@@ -278,4 +291,4 @@ const AnalysisResults = ({ results }) => {
   );
 };
 
-export default AnalysisResults;
+export default AnalysisResults; 
