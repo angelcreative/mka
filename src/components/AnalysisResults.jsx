@@ -13,16 +13,10 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import { Chart } from 'chart.js';
+import { registerables } from 'chart.js';
 
-ChartJS.register(
-  ArcElement,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+Chart.register(...registerables);
 
 const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' }) => {
   const [showChart, setShowChart] = React.useState(false);
@@ -78,12 +72,8 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
 
     const { headers, data } = tableData;
     
-    // Solo mostrar el botón de gráfica cuando hay datos numéricos válidos
-    const hasNumericData = data.some(row => 
-      row.values.some(val => !isNaN(parseFloat(val)) && val !== 0)
-    );
-    
-    if (!hasNumericData) return null;
+    // Asegurarse de que los datos sean válidos
+    if (!headers || !data || data.length === 0) return null;
 
     return (
       <Bar
@@ -104,6 +94,11 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
         options={{
           responsive: true,
           maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          },
           plugins: {
             legend: { position: 'top' },
             tooltip: {
@@ -291,4 +286,4 @@ const AnalysisResults = ({ results }) => {
   );
 };
 
-export default AnalysisResults; 
+export default AnalysisResults;
