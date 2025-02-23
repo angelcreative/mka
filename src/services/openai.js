@@ -110,40 +110,51 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
           role: 'system',
           content: `You are a market conquest strategist analyzing ${brand1} and ${brand2} audience data.
           
-          Structure your analysis as follows:
-
-          # Segment Analysis
-          For each identified segment from the reports, provide:
+          # Market Segment Analysis: ${brand1} vs ${brand2}
           
-          1. Demographics and Interests:
-          - Detailed qualitative description
-          - Key characteristics
-          - Behavioral patterns
+          # Similar Segments Across Both Platforms
+          | ${brand1} Segment | Size | ${brand2} Segment | Size | Share % | Similarity Notes |
+          |------------------|------|------------------|------|----------|------------------|
+          Note: All sizes must be actual numbers (e.g., Marvel & Movies 🎬 | 19,376 | Marvel & DC 🎬 | 25,328 | 76.5% | Both superhero fans)
           
-          2. Quantitative Metrics:
-          | Metric | ${brand1} | ${brand2} | Gap/Opportunity |
-          |--------|-----------|-----------|----------------|
+          # Unique ${brand1} Segments
+          | Segment | Size | Market Share | Category Size | Penetration |
+          |---------|------|--------------|---------------|-------------|
+          Note: All metrics must be actual numbers (e.g., Tech Enthusiasts 💻 | 12,972 | 15.3% | 84,750 | High)
           
-          3. Opportunity:
-          Clear strategic recommendation for market conquest
-
-          # Strategic Recommendations
+          # Unique ${brand2} Segments
+          | Segment | Size | Market Share | Category Size | Penetration |
+          |---------|------|--------------|---------------|-------------|
+          Note: All metrics must be actual numbers
           
-          1. [Initiative Name]:
-          Detailed qualitative explanation of the strategy
+          # Key Insights
+          1. Primary Platform Comparison
+          2. Content Focus Comparison
+          3. Audience Composition
+          4. International Presence
+          5. Brand Positioning
+          6. Growth Opportunities
+          7. Unique Value Propositions
           
-          | Implementation | Current | Target | Impact |
-          |---------------|---------|--------|--------|
+          # Customer Loyalty Analysis
+          - Deep dive into emotional and practical factors driving customer loyalty
+          - Identify specific customer segments and their key loyalty drivers
+          - Analyze price sensitivity, brand perception, and switching barriers
           
-          2. [Next Initiative]:
-          Strategic explanation...
-
-          Guidelines:
-          - Balance qualitative insights with quantitative data
-          - Include percentages where relevant for visualization
-          - Focus on actionable conquest strategies
-          - Maintain clear narrative flow
-          - Identify specific opportunities in each segment`
+          # Conversion Opportunities
+          - Map customer pain points with heritage brands
+          - Identify unmet needs and service gaps
+          - Highlight demographic and behavioral patterns of customers most likely to switch
+          
+          # Targeted Strategies
+          - Develop segment-specific conversion strategies
+          - Outline marketing messages that address emotional and practical switching barriers
+          - Create timeline and touchpoint recommendations for the customer journey
+          
+          # Differentiated Value Proposition
+          - Craft compelling reasons to switch that go beyond price
+          - Position emerging brand advantages against heritage brand weaknesses
+          - Define unique selling propositions for each major customer segment`
         },
         {
           role: 'user',

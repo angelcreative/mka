@@ -91,6 +91,14 @@ function PdfAnalyzer() {
     }
   };
 
+  const extractSegmentsFromAnalysis = (analysis) => {
+    // Implementation of extractSegmentsFromAnalysis function
+  };
+
+  const handleSegmentSelection = (segments) => {
+    // Implementation of handleSegmentSelection function
+  };
+
   return (
     <div className="max-w-5xl mx-auto p-6">
       <div className="space-y-8">
@@ -206,7 +214,20 @@ function PdfAnalyzer() {
             {/* Quick Actions */}
             <div className="p-4 border-b">
               <div className="grid grid-cols-2 gap-3">
-                <button className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 text-left">
+                <button 
+                  onClick={() => {
+                    const segments = extractSegmentsFromAnalysis(analysis.summary);
+                    if (!segments || segments.length === 0) {
+                      setChatMessages(prev => [...prev, {
+                        role: 'assistant',
+                        content: 'I apologize, but I could not find any valid segments to analyze. Please make sure the analysis contains segment information.'
+                      }]);
+                      return;
+                    }
+                    handleSegmentSelection(segments);
+                  }}
+                  className="p-3 bg-[#f7f7f7] rounded-lg hover:bg-gray-100 text-left transition-colors"
+                >
                   <span className="font-medium">Attack a Segment</span>
                   <p className="text-sm text-gray-600">Create conquest strategy</p>
                 </button>

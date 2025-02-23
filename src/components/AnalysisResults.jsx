@@ -183,11 +183,13 @@ const AnalysisResults = ({ results }) => {
   }
 
   const analysisText = results.summary;
-  const sections = analysisText.split('###').filter(Boolean).map(section => {
-    const [title, ...content] = section.trim().split('\n');
+  const sections = analysisText.split(/(?=# )/).filter(Boolean).map(section => {
+    const lines = section.trim().split('\n');
+    const title = lines[0].replace(/^#+\s*/, '');
+    const content = lines.slice(1).join('\n').trim();
     return {
-      title: title.trim().replace(/^#+\s*/, '').replace(/^[^\w\s]/, '') || 'Analysis Section',
-      content: content.join('\n').trim() || 'No content available'
+      title,
+      content: content || 'No content available'
     };
   });
 
