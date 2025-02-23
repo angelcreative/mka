@@ -196,22 +196,37 @@ function PdfAnalyzer() {
         )}
 
         {showChat && (
-          <div className="fixed bottom-6 right-6 w-96 bg-white rounded-lg shadow-xl overflow-hidden border border-gray-200">
-            {/* Chat Header */}
+          <div className="fixed inset-y-0 right-0 w-[400px] bg-white shadow-xl flex flex-col">
+            {/* Header */}
             <div className="bg-[#1f1f1f] text-white p-4 flex justify-between items-center">
               <h3 className="font-semibold">I'm Boty your AI Audiense assistant</h3>
-              <button 
-                onClick={() => setShowChat(false)}
-                className="text-white/90 hover:text-white transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+              <button onClick={() => setShowChat(false)}>...</button>
             </div>
-            
+
+            {/* Quick Actions */}
+            <div className="p-4 border-b">
+              <div className="grid grid-cols-2 gap-3">
+                <button className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 text-left">
+                  <span className="font-medium">Attack a Segment</span>
+                  <p className="text-sm text-gray-600">Create conquest strategy</p>
+                </button>
+                <button className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 text-left">
+                  <span className="font-medium">Compare Segments</span>
+                  <p className="text-sm text-gray-600">Analyze overlap</p>
+                </button>
+                <button className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 text-left">
+                  <span className="font-medium">Growth Strategy</span>
+                  <p className="text-sm text-gray-600">Market expansion plan</p>
+                </button>
+                <button className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 text-left">
+                  <span className="font-medium">Audience Insights</span>
+                  <p className="text-sm text-gray-600">Deep dive analysis</p>
+                </button>
+              </div>
+            </div>
+
             {/* Chat Messages */}
-            <div className="h-96 overflow-y-auto p-4 space-y-4 bg-gray-50">
+            <div className="flex-1 bg-white overflow-y-auto">
               {chatMessages.map((message, index) => (
                 <div
                   key={index}

@@ -110,59 +110,40 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
           role: 'system',
           content: `You are a market conquest strategist analyzing ${brand1} and ${brand2} audience data.
           
-          Core Fans Analysis
-          | Metric | ${brand1} | ${brand2} | Gap Analysis |
-          |--------|-----------|-----------|--------------|
-          | Market Share | 16.3% | 41.5% | -25.2% |
-          | Engagement Rate | 8.2% | 12.4% | -4.2% |
-          | Content Affinity | 85% | 92% | -7% |
-          
-          ${brand1} has a significant portion of its audience that identifies as fans (16%) and shows a strong affinity for ${brand1}-related content. ${brand2} also shares affinity with similar content but to a lesser extent.
-          
-          Content Creators Segment
-          | Metric | ${brand1} | ${brand2} | Opportunity |
-          |--------|-----------|-----------|-------------|
-          | Creator Base | 12.5% | 28.4% | +15.9% growth potential |
-          | Monetization | 25% | 45% | +20% monetization gap |
-          | Tools Usage | 35% | 65% | +30% feature adoption |
-          
-          ${brand1} shows less engagement with content creators compared to ${brand2}. However, both platforms share an affinity for creative and artistic segments.
-          
-          Early Adopters Analysis
-          | Behavior | ${brand1} | ${brand2} | Action Gap |
-          |----------|-----------|-----------|------------|
-          | Tech Adoption | 28% | 42% | +14% to close |
-          | Feature Usage | 45% | 68% | +23% opportunity |
-          | Platform Activity | 3.2h/day | 4.5h/day | +1.3h engagement |
-          
-          Both platforms engage early adopters, with ${brand2} having a higher share. The affinity for tech enthusiasts and gaming community segments on ${brand2} suggests a more technologically curious audience.
-          
-          Strategic Recommendations
-          | Initiative | Current | Target | Impact |
-          |------------|---------|---------|---------|
-          | Creator Program | 12.5% | 30% | +17.5% growth |
-          | Community Features | 45% | 75% | +30% engagement |
-          | Premium Features | 28% | 50% | +22% revenue |
-          | Engagement Hooks | 3.2h | 4.5h | +1.3h usage |
+          Structure your analysis as follows:
 
-          1. Creator Program: Launch a creator program targeting the 'Creatives & Artists' and 'Streamer Community' segments...
+          # Segment Analysis
+          For each identified segment from the reports, provide:
           
-          2. Community Features: Implementing enhanced community features...
+          1. Demographics and Interests:
+          - Detailed qualitative description
+          - Key characteristics
+          - Behavioral patterns
           
-          3. Premium Features for Young Professionals: Given the segment's potential for growth...
+          2. Quantitative Metrics:
+          | Metric | ${brand1} | ${brand2} | Gap/Opportunity |
+          |--------|-----------|-----------|----------------|
           
-          4. Increase Engagement Hooks: To address the daily usage gap...
+          3. Opportunity:
+          Clear strategic recommendation for market conquest
+
+          # Strategic Recommendations
           
-          Conclusion
-          | Key Metric | Current State | Target State | Timeline |
-          |------------|---------------|--------------|----------|
-          | Market Share | 35% | 55% | Q4 2024 |
-          | Creator Base | 12.5k | 25k | Q2 2024 |
-          | User Retention | 68% | 85% | Q3 2024 |
+          1. [Initiative Name]:
+          Detailed qualitative explanation of the strategy
           
-          The analysis reveals clear opportunities for ${brand1} to focus on its unique strengths...
+          | Implementation | Current | Target | Impact |
+          |---------------|---------|--------|--------|
           
-          Provide detailed analysis comparing the reports with focus on market conquest opportunities.`
+          2. [Next Initiative]:
+          Strategic explanation...
+
+          Guidelines:
+          - Balance qualitative insights with quantitative data
+          - Include percentages where relevant for visualization
+          - Focus on actionable conquest strategies
+          - Maintain clear narrative flow
+          - Identify specific opportunities in each segment`
         },
         {
           role: 'user',

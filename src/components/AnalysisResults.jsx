@@ -78,102 +78,41 @@ const AnalysisCard = ({ title, content, onPrint, onCopy, className = '' }) => {
 
     const { headers, data } = tableData;
     
-    // Filtrar filas con datos reales
-    const validData = {
-      headers,
-      data: data.filter(row => 
-        row.values.some(val => val > 0)
-      )
-    };
+    // Solo mostrar el botón de gráfica cuando hay datos numéricos válidos
+    const hasNumericData = data.some(row => 
+      row.values.some(val => !isNaN(parseFloat(val)) && val !== 0)
+    );
     
-    if (validData.data.length === 0) return null;
-    
-    if (title.toLowerCase().includes('affinity') || title.toLowerCase().includes('overlap')) {
-      return (
-        <Bar
-          data={{
-            labels: validData.data.map(row => row.label),
-            datasets: headers.slice(1).map((header, i) => ({
-              label: header,
-              data: validData.data.map(row => row.values[i]),
-              backgroundColor: i === 0 ? 'rgba(59, 130, 246, 0.8)' : 'rgba(99, 102, 241, 0.8)',
-              borderColor: i === 0 ? 'rgba(59, 130, 246, 1)' : 'rgba(99, 102, 241, 1)',
-              borderWidth: 1
-            }))
-          }}
-          options={{
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-              mode: 'index',
-              intersect: false,
-            },
-            plugins: {
-              legend: { 
-                position: 'top',
-                labels: {
-                  usePointStyle: true,
-                  padding: 20
-                }
-              },
-              tooltip: {
-                callbacks: {
-                  label: (context) => `${context.dataset.label}: ${context.parsed.y}%`
-                }
-              },
-              title: { display: true, text: title }
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-                ticks: {
-                  callback: value => `${value}%`
-                }
-              }
-            }
-          }}
-          style={{ height: '300px' }}
-        />
-      );
-    }
+    if (!hasNumericData) return null;
 
     return (
-      <Doughnut
+      <Bar
         data={{
           labels: data.map(row => row.label),
-          datasets: [{
-            data: data.map(row => row.values[0]),
+          datasets: headers.slice(1).map((header, i) => ({
+            label: header,
+            data: data.map(row => row.values[i]),
             backgroundColor: [
-              'rgba(59, 130, 246, 0.8)',  // blue
-              'rgba(99, 102, 241, 0.8)',  // indigo
-              'rgba(139, 92, 246, 0.8)',  // violet
-              'rgba(236, 72, 153, 0.8)',  // pink
-              'rgba(248, 113, 113, 0.8)', // red
+              'rgba(59, 130, 246, 0.8)',
+              'rgba(99, 102, 241, 0.8)',
+              'rgba(139, 92, 246, 0.8)'
             ],
             borderColor: '#ffffff',
-            borderWidth: 2
-          }]
+            borderWidth: 1
+          }))
         }}
         options={{
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { 
-              position: 'right',
-              labels: {
-                usePointStyle: true,
-                padding: 20
-              }
-            },
+            legend: { position: 'top' },
             tooltip: {
               callbacks: {
-                label: (context) => `${context.label}: ${context.parsed}%`
+                label: (context) => `${context.dataset.label}: ${context.parsed.y}%`
               }
-            },
-            title: { display: true, text: title }
+            }
           }
         }}
-        style={{ height: '300px' }}
       />
     );
   };
