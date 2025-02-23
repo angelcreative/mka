@@ -120,34 +120,7 @@ function PdfAnalyzer() {
     setIsTyping(true);
 
     try {
-      let response;
-      switch (selectedAction) {
-        case chatActions.ATTACK_SEGMENT:
-          response = await chatWithAI(
-            `Analiza el segmento "${message}" y proporciona:
-             1. Tamaño y métricas clave
-             2. Comportamiento y preferencias
-             3. Estrategia de conquista detallada
-             4. Tácticas específicas de conversión
-             5. KPIs para medir éxito`,
-            analysis.summary
-          );
-          break;
-
-        case chatActions.COMPARE_SEGMENTS:
-          response = await chatWithAI(
-            `Compara los segmentos mencionados en términos de:
-             1. Tamaño y engagement
-             2. Comportamiento
-             3. Oportunidades de conversión
-             4. Estrategias específicas`,
-            analysis.summary
-          );
-          break;
-
-        default:
-          response = await chatWithAI(message, analysis.summary);
-      }
+      const response = await chatWithAI(message, analysis.summary);
 
       setChatMessages(prev => [...prev, { role: 'assistant', content: response }]);
     } catch (error) {
@@ -289,30 +262,14 @@ function PdfAnalyzer() {
             </div>
 
             {/* Quick Actions */}
-            <div className="p-4 border-b">
-              <div className="grid grid-cols-2 gap-3">
-                <button 
-                  onClick={() => handleActionClick(chatActions.ATTACK_SEGMENT)}
-                  className="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-left transition-colors shadow-sm"
-                >
-                  <span className="font-medium">Attack a Segment</span>
-                  <p className="text-sm text-gray-600">Create conquest strategy</p>
-                </button>
-                <button 
-                  onClick={() => handleActionClick(chatActions.COMPARE_SEGMENTS)}
-                  className="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-left transition-colors shadow-sm"
-                >
-                  <span className="font-medium">Compare Segments</span>
-                  <p className="text-sm text-gray-600">Analyze overlap</p>
-                </button>
-                <button className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 text-left">
-                  <span className="font-medium">Growth Strategy</span>
-                  <p className="text-sm text-gray-600">Market expansion plan</p>
-                </button>
-                <button className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 text-left">
-                  <span className="font-medium">Audience Insights</span>
-                  <p className="text-sm text-gray-600">Deep dive analysis</p>
-                </button>
+            <div className="p-4 border-b text-sm text-gray-600">
+              <p className="mb-2 font-medium text-gray-700">Sugerencias de preguntas:</p>
+              <div className="space-y-2">
+                <p>• "¿Cómo puedo conquistar el segmento de [nombre]?"</p>
+                <p>• "Compara los segmentos [segmento1] y [segmento2]"</p>
+                <p>• "¿Cuál es la mejor estrategia de crecimiento?"</p>
+                <p>• "Analiza el comportamiento del segmento [nombre]"</p>
+                <p>• "¿Qué oportunidades hay en [segmento]?"</p>
               </div>
             </div>
 
