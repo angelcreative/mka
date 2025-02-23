@@ -277,8 +277,15 @@ function PdfAnalyzer() {
           <div className="fixed inset-y-0 right-0 w-[400px] bg-white shadow-xl flex flex-col">
             {/* Header */}
             <div className="bg-[#1f1f1f] text-white p-4 flex justify-between items-center">
-              <h3 className="font-semibold">I'm Boty your AI Audiense assistant</h3>
-              <button onClick={() => setShowChat(false)}>...</button>
+              <h3 className="font-semibold">Ask Audiense AI Agent</h3>
+              <button 
+                onClick={() => setShowChat(false)}
+                className="hover:bg-gray-700 p-1 rounded-full transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
             </div>
 
             {/* Quick Actions */}
@@ -286,14 +293,14 @@ function PdfAnalyzer() {
               <div className="grid grid-cols-2 gap-3">
                 <button 
                   onClick={() => handleActionClick(chatActions.ATTACK_SEGMENT)}
-                  className="p-3 bg-[#f7f7f7] rounded-lg hover:bg-gray-100 text-left transition-colors"
+                  className="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-left transition-colors shadow-sm"
                 >
                   <span className="font-medium">Attack a Segment</span>
                   <p className="text-sm text-gray-600">Create conquest strategy</p>
                 </button>
                 <button 
                   onClick={() => handleActionClick(chatActions.COMPARE_SEGMENTS)}
-                  className="p-3 bg-[#f7f7f7] rounded-lg hover:bg-gray-100 text-left"
+                  className="p-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-left transition-colors shadow-sm"
                 >
                   <span className="font-medium">Compare Segments</span>
                   <p className="text-sm text-gray-600">Analyze overlap</p>
@@ -310,25 +317,25 @@ function PdfAnalyzer() {
             </div>
 
             {/* Chat Messages */}
-            <div className="flex-1 bg-white overflow-y-auto">
+            <div className="flex-1 bg-gray-50 overflow-y-auto p-4 space-y-4">
               {chatMessages.map((message, index) => (
                 <div
                   key={index}
-                  className={`p-4 rounded-xl ${
+                  className={`max-w-[85%] ${
                     message.role === 'user' 
-                      ? 'bg-[#1f1f1f] text-white/95 ml-auto max-w-[80%] shadow-md' 
-                      : 'bg-white text-gray-700 border border-gray-200 max-w-[80%] shadow-md'
-                  } max-w-[80%] prose`}
+                      ? 'bg-blue-50 text-gray-800 ml-auto' 
+                      : 'bg-gray-50 text-gray-800'
+                  } rounded-xl p-4 prose`}
                 >
                   <ReactMarkdown>{message.content}</ReactMarkdown>
                 </div>
               ))}
               {isTyping && (
                 <div className="flex">
-                  <div className="bg-white border border-gray-200 rounded-xl p-3 flex items-center space-x-2 shadow-sm">
-                    <div className="w-2 h-2 bg-[#1f1f1f] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                    <div className="w-2 h-2 bg-[#1f1f1f] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                    <div className="w-2 h-2 bg-[#1f1f1f] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                  <div className="bg-gray-50 rounded-xl p-3 flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                   </div>
                 </div>
               )}
@@ -344,16 +351,15 @@ function PdfAnalyzer() {
                   placeholder="Ask a question..."
                   disabled={isTyping}
                   className="w-full p-3 pr-10 bg-white border border-gray-300 rounded-lg 
-                           focus:outline-none focus:ring-2 focus:ring-[#1f1f1f] focus:border-transparent
-                           disabled:bg-gray-50 text-gray-700 placeholder-gray-500
-                           shadow-sm"
+                           focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                           disabled:bg-gray-50 text-gray-700 placeholder-gray-500"
                   onKeyPress={(e) => e.key === 'Enter' && !isTyping && handleUserMessage(userMessage)}
                 />
                 {!isTyping && userMessage.trim() && (
                   <button
                     onClick={() => handleUserMessage(userMessage)}
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 
-                             text-gray-700 hover:text-[#1f1f1f] transition-colors"
+                             text-gray-700 hover:text-blue-500 transition-colors"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
