@@ -26,64 +26,63 @@ ChartJS.register(
 
 const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' }) => {
   const [showChart, setShowChart] = React.useState(false);
-  const chartRef = React.useRef(null);
 
-  const parseTableData = (content) => {
+  const parseTableData = React.useCallback((content) => {
     const rows = content.split('\n').filter(row => row.includes('|'));
     if (rows.length < 3) return null;
 
-    // Verificar si hay datos numéricos válidos
-    const hasValidData = rows.slice(2).some(row => {
-      const cells = row.split('|').filter(Boolean);
-      return cells.slice(1).some(cell => {
-        const val = cell.trim();
-        return !isNaN(parseFloat(val)) && val !== '-' && val !== 'N/A';
+    // Validación más robusta de datos
+    try {
+      const hasValidData = rows.slice(2).some(row => {
+        const cells = row.split('|').filter(Boolean);
+        return cells.slice(1).some(cell => {
+          const val = cell.trim();
+          return !isNaN(parseFloat(val)) && val !== '-' && val !== 'N/A';
+        });
       });
-    });
 
-    if (!hasValidData) return null;
+      if (!hasValidData) return null;
 
-    const headers = rows[0].split('|')
-      .filter(Boolean)
-      .map(h => h.trim());
-    
-    const data = rows.slice(2).map(row => {
-      const cells = row.split('|')
+      const headers = rows[0].split('|')
         .filter(Boolean)
-        .map(cell => cell.trim());
+        .map(h => h.trim());
       
-      return {
-        label: cells[0],
-        values: cells.slice(1).map(val => {
-          if (val === 'N/A' || val === '-') return 0;
-          const number = parseFloat(val.replace(/[^0-9.-]/g, ''));
-          return isNaN(number) ? 0 : number;
-        })
-      };
-    });
+      const data = rows.slice(2).map(row => {
+        const cells = row.split('|')
+          .filter(Boolean)
+          .map(cell => cell.trim());
+        
+        if (cells.length < 2) return null; // Prevenir filas inválidas
+        
+        return {
+          label: cells[0],
+          values: cells.slice(1).map(val => {
+            if (val === 'N/A' || val === '-') return 0;
+            const number = parseFloat(val.replace(/[^0-9.-]/g, ''));
+            return isNaN(number) ? 0 : number;
+          })
+        };
+      }).filter(Boolean); // Filtrar filas nulas
 
-    // Si todos los valores son 0, probablemente sean N/A
-    const allZeros = data.every(row => 
-      row.values.every(val => val === 0)
-    );
-    
-    if (allZeros) return null;
+      if (data.length === 0) return null;
 
-    return { headers, data };
-  };
+      return { headers, data };
+    } catch (error) {
+      console.error('Error parsing table data:', error);
+      return null;
+    }
+  }, []);
 
-  const renderChart = () => {
+  const renderChart = React.useCallback(() => {
     const tableData = parseTableData(content);
     if (!tableData) return null;
 
     const { headers, data } = tableData;
     
-    // Solo mostrar el botón de gráfica cuando hay datos numéricos válidos
-    const hasNumericData = data.some(row => 
-      row.values.some(val => !isNaN(parseFloat(val)) && val !== 0)
-    );
-    
-    if (!hasNumericData) return null;
+    // Validación adicional para datos de gráfica
+    if (!headers || headers.length < 2 || !data || data.length === 0) {
+      return null;
+    }
 
     return (
       <Bar
@@ -115,9 +114,11 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
         }}
       />
     );
-  };
+  }, [content, parseTableData]);
 
-  const renderContent = () => {
+  const renderContent = React.useCallback(() => {
+    if (!content) return null;
+    
     return (
       <div className="prose max-w-none">
         <ReactMarkdown 
@@ -149,14 +150,16 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
         </ReactMarkdown>
       </div>
     );
-  };
+  }, [content]);
 
   return (
     <div className={`bg-white rounded-lg shadow-sm p-6 ${className}`}>
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold text-gray-800 break-words max-w-[80%]">{title}</h3>
+        <h3 className="text-xl font-semibold text-gray-800 break-words max-w-[80%]">
+          {title || 'Untitled Section'}
+        </h3>
         <div className="flex gap-2">
-          {parseTableData(content) && (
+          {content && parseTableData(content) && (
             <button
               onClick={() => setShowChart(!showChart)}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -192,6 +195,13 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
 };
 
 const AnalysisResults = ({ results }) => {
+  const determineContentType = (content) => {
+    if (content.includes('|---')) return 'table';
+    if (content.match(/^\d+\./m)) return 'numbered-list';
+    if (content.match(/^[-*]/m)) return 'bullet-list';
+    return 'text';
+  };
+
   if (!results || typeof results.summary !== 'string') {
     console.error('Invalid results:', results);
     return null;
@@ -225,13 +235,6 @@ const AnalysisResults = ({ results }) => {
       type: determineContentType(content)
     };
   });
-
-  const determineContentType = (content) => {
-    if (content.includes('|---')) return 'table';
-    if (content.match(/^\d+\./m)) return 'numbered-list';
-    if (content.match(/^[-*]/m)) return 'bullet-list';
-    return 'text';
-  };
 
   const validSections = sections.filter(section => 
     section.content && 
