@@ -32,6 +32,33 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
     if (rows.length < 3) return null;
 
     try {
+      // Manejo especial para "Similar Segments Across Both Platforms"
+      if (content.includes('Similar Segments Across Both Platforms')) {
+        const headers = ['MOTU Size', 'TWD Size', 'Share %'];
+        
+        const data = rows.slice(2).map(row => {
+          const cells = row.split('|')
+            .filter(Boolean)
+            .map(cell => cell.trim());
+          
+          if (cells.length < 5) return null; // Necesitamos al menos 5 columnas
+          
+          // Extraer solo los valores numéricos de las columnas relevantes
+          const motuSize = parseFloat(cells[1].replace(/[^0-9.-]/g, ''));
+          const twdSize = parseFloat(cells[3].replace(/[^0-9.-]/g, ''));
+          const sharePercent = parseFloat(cells[4].replace(/[^0-9.-]/g, ''));
+          
+          if (isNaN(motuSize) || isNaN(twdSize) || isNaN(sharePercent)) return null;
+          
+          return {
+            label: cells[0], // Nombre del segmento
+            values: [motuSize, twdSize, sharePercent]
+          };
+        }).filter(Boolean);
+        
+        return { headers, data };
+      }
+
       const headers = rows[0].split('|')
         .filter(Boolean)
         .map(h => h.trim());
@@ -92,12 +119,11 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
 
     const { headers, data } = tableData;
     
-    // Mapa de colores para diferentes tipos de datos
-    const colorMap = {
-      'Size': 'rgba(59, 130, 246, 0.8)',      // Azul
-      'Market Share': 'rgba(16, 185, 129, 0.8)', // Verde
-      'Penetration': 'rgba(239, 68, 68, 0.8)',   // Rojo
-      'Share %': 'rgba(139, 92, 246, 0.8)'     // Morado
+    // Colores específicos para Similar Segments
+    const similarSegmentsColors = {
+      'MOTU Size': 'rgba(59, 130, 246, 0.8)',   // Azul
+      'TWD Size': 'rgba(59, 130, 246, 0.8)',    // Azul
+      'Share %': 'rgba(139, 92, 246, 0.8)'      // Morado
     };
 
     return (
@@ -107,7 +133,7 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
           datasets: headers.map((header, i) => ({
             label: header,
             data: data.map(row => row.values[i]),
-            backgroundColor: colorMap[header] || `hsl(${i * 50}, 70%, 60%)`,
+            backgroundColor: similarSegmentsColors[header] || `hsl(${i * 50}, 70%, 60%)`,
             borderColor: '#ffffff',
             borderWidth: 1
           }))
