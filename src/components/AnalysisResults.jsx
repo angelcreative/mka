@@ -24,7 +24,7 @@ ChartJS.register(
   Legend
 );
 
-const AnalysisCard = ({ title, content, onPrint, onCopy, className = '' }) => {
+const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' }) => {
   const [showChart, setShowChart] = React.useState(false);
   const chartRef = React.useRef(null);
 
@@ -117,10 +117,44 @@ const AnalysisCard = ({ title, content, onPrint, onCopy, className = '' }) => {
     );
   };
 
+  const renderContent = () => {
+    return (
+      <div className="prose max-w-none">
+        <ReactMarkdown 
+          remarkPlugins={[remarkGfm]}
+          components={{
+            table: props => (
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full divide-y divide-gray-200 border" {...props} />
+              </div>
+            ),
+            th: props => (
+              <th className="px-4 py-2 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b" {...props} />
+            ),
+            td: props => (
+              <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500 border-b" {...props} />
+            ),
+            ul: props => (
+              <ul className="list-disc pl-4 space-y-2" {...props} />
+            ),
+            ol: props => (
+              <ol className="list-decimal pl-4 space-y-2" {...props} />
+            ),
+            p: props => (
+              <p className="my-2 text-gray-700" {...props} />
+            )
+          }}
+        >
+          {content}
+        </ReactMarkdown>
+      </div>
+    );
+  };
+
   return (
     <div className={`bg-white rounded-lg shadow-sm p-6 ${className}`}>
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold text-gray-800">{title}</h3>
+        <h3 className="text-xl font-semibold text-gray-800 break-words max-w-[80%]">{title}</h3>
         <div className="flex gap-2">
           {parseTableData(content) && (
             <button
@@ -148,30 +182,11 @@ const AnalysisCard = ({ title, content, onPrint, onCopy, className = '' }) => {
         </div>
       </div>
       {showChart && (
-        <div className="mb-6">
+        <div className="mb-6 h-[300px]">
           {renderChart()}
         </div>
       )}
-      <div className="prose max-w-none">
-        <ReactMarkdown 
-          remarkPlugins={[remarkGfm]}
-          components={{
-            table: props => (
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200" {...props} />
-              </div>
-            ),
-            th: props => (
-              <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" {...props} />
-            ),
-            td: props => (
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500" {...props} />
-            )
-          }}
-        >
-          {content}
-        </ReactMarkdown>
-      </div>
+      {renderContent()}
     </div>
   );
 };
@@ -183,20 +198,46 @@ const AnalysisResults = ({ results }) => {
   }
 
   const analysisText = results.summary;
-  const sections = analysisText.split(/(?=# )/).filter(Boolean).map(section => {
+  const sections = analysisText.split(/(?=# [A-Z])/).filter(Boolean).map(section => {
     const lines = section.trim().split('\n');
-    const title = lines[0].replace(/^#+\s*/, '');
+    const title = lines[0].replace(/^#+\s*/, '').trim();
     const content = lines.slice(1).join('\n').trim();
+    
+    // Validar que la sección sea una de las requeridas
+    const requiredSections = [
+      'Market Segment Analysis',
+      'Similar Segments Across Both Platforms',
+      'Unique',
+      'Key Insights',
+      'Customer Loyalty Analysis',
+      'Conversion Opportunities',
+      'Targeted Strategies',
+      'Differentiated Value Proposition'
+    ];
+    
+    if (!requiredSections.some(req => title.includes(req))) {
+      console.warn(`Unexpected section: ${title}`);
+    }
+
     return {
       title,
-      content: content || 'No content available'
+      content,
+      type: determineContentType(content)
     };
   });
 
+  const determineContentType = (content) => {
+    if (content.includes('|---')) return 'table';
+    if (content.match(/^\d+\./m)) return 'numbered-list';
+    if (content.match(/^[-*]/m)) return 'bullet-list';
+    return 'text';
+  };
+
   const validSections = sections.filter(section => 
     section.content && 
-    section.content !== 'No content available' && 
-    !section.content.toLowerCase().includes('no content available')
+    section.content !== 'No content available' &&
+    section.title && 
+    section.title.length > 0
   );
 
   if (sections.length === 0) {
@@ -241,6 +282,7 @@ const AnalysisResults = ({ results }) => {
           key={index}
           title={section.title}
           content={section.content}
+          type={section.type}
           onPrint={() => handlePrint(section)}
           onCopy={() => handleCopy(section)}
         />

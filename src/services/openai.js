@@ -77,23 +77,34 @@ const extractTextFromCsv = async (file) => {
 };
 
 const getFileContent = async (file) => {
-  if (file.type === 'application/pdf') {
+  let extractedData = '';
+  
+  if (typeof file === 'string' && file.includes('audiense.com')) {
+    try {
+      const response = await axios.get(file);
+      extractedData = formatAudienseData(response.data);
+    } catch (error) {
+      console.error('Error fetching Audiense data:', error);
+      throw error;
+    }
+  } else if (file.type === 'application/pdf') {
     const buffer = await file.arrayBuffer();
-    return extractTextFromPdf(buffer);
-  } else if (
-    file.type.includes('spreadsheet') || 
-    file.type.includes('excel') ||
-    file.name.endsWith('.xlsx') ||
-    file.name.endsWith('.xls')
-  ) {
-    return extractTextFromExcel(file);
-  } else if (
-    file.type === 'text/csv' ||
-    file.name.endsWith('.csv')
-  ) {
-    return extractTextFromCsv(file);
+    extractedData = await extractTextFromPdf(buffer);
+  } else if (file.type.includes('spreadsheet') || file.type.includes('excel')) {
+    extractedData = await extractTextFromExcel(file);
+  } else if (file.type === 'text/csv') {
+    extractedData = await extractTextFromCsv(file);
   }
-  throw new Error('Unsupported file type');
+
+  validateExtractedData(extractedData);
+  
+  return extractedData;
+};
+
+const validateExtractedData = (data) => {
+  if (!data || typeof data !== 'string' || data.length < 100) {
+    throw new Error('Invalid or insufficient data extracted from file');
+  }
 };
 
 export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
@@ -108,53 +119,32 @@ export const analyzePdfs = async (pdf1, pdf2, brand1, brand2) => {
       messages: [
         {
           role: 'system',
-          content: `You are a market conquest strategist analyzing ${brand1} and ${brand2} audience data.
-          
-          # Market Segment Analysis: ${brand1} vs ${brand2}
-          
-          # Similar Segments Across Both Platforms
-          | ${brand1} Segment | Size | ${brand2} Segment | Size | Share % | Similarity Notes |
-          |------------------|------|------------------|------|----------|------------------|
-          Note: All sizes must be actual numbers (e.g., Marvel & Movies 🎬 | 19,376 | Marvel & DC 🎬 | 25,328 | 76.5% | Both superhero fans)
-          
-          # Unique ${brand1} Segments
-          | Segment | Size | Market Share | Category Size | Penetration |
-          |---------|------|--------------|---------------|-------------|
-          Note: All metrics must be actual numbers (e.g., Tech Enthusiasts 💻 | 12,972 | 15.3% | 84,750 | High)
-          
-          # Unique ${brand2} Segments
-          | Segment | Size | Market Share | Category Size | Penetration |
-          |---------|------|--------------|---------------|-------------|
-          Note: All metrics must be actual numbers
-          
-          # Key Insights
-          1. Primary Platform Comparison
-          2. Content Focus Comparison
-          3. Audience Composition
-          4. International Presence
-          5. Brand Positioning
-          6. Growth Opportunities
-          7. Unique Value Propositions
-          
-          # Customer Loyalty Analysis
-          - Deep dive into emotional and practical factors driving customer loyalty
-          - Identify specific customer segments and their key loyalty drivers
-          - Analyze price sensitivity, brand perception, and switching barriers
-          
-          # Conversion Opportunities
-          - Map customer pain points with heritage brands
-          - Identify unmet needs and service gaps
-          - Highlight demographic and behavioral patterns of customers most likely to switch
-          
-          # Targeted Strategies
-          - Develop segment-specific conversion strategies
-          - Outline marketing messages that address emotional and practical switching barriers
-          - Create timeline and touchpoint recommendations for the customer journey
-          
-          # Differentiated Value Proposition
-          - Craft compelling reasons to switch that go beyond price
-          - Position emerging brand advantages against heritage brand weaknesses
-          - Define unique selling propositions for each major customer segment`
+          content: `You are a market conquest strategist. Your task is to analyze two audience reports and provide a STRICTLY FORMATTED analysis following this exact structure:
+
+          1. First section MUST be "Market Segment Analysis: ${brand1} vs ${brand2}"
+          2. Second section MUST be "Similar Segments Across Both Platforms" with this exact table format:
+             | ${brand1} Segment | Size | ${brand2} Segment | Size | Share % | Similarity Notes |
+             Use actual numbers and emojis for segments.
+
+          3. Third section MUST be "Unique ${brand1} Segments" with this exact table format:
+             | Segment | Size | Market Share | Category Size | Penetration |
+             Use actual numbers and emojis.
+
+          4. Fourth section MUST be "Unique ${brand2} Segments" with same format as above.
+
+          5. Following sections MUST be in this exact order:
+             - Key Insights (with 7 numbered points)
+             - Customer Loyalty Analysis (with bullet points)
+             - Conversion Opportunities (with bullet points)
+             - Targeted Strategies (with bullet points)
+             - Differentiated Value Proposition (with bullet points)
+
+          IMPORTANT RULES:
+          - ALWAYS include actual numbers from the reports
+          - ALWAYS use emojis for segment names
+          - NEVER skip any section
+          - ALWAYS maintain table formats exactly as shown
+          - ALWAYS ensure data is properly formatted for charts`
         },
         {
           role: 'user',

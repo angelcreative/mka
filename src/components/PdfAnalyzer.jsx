@@ -15,7 +15,15 @@ function PdfAnalyzer() {
   const [chatMessages, setChatMessages] = useState([]);
   const [userMessage, setUserMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [selectedAction, setSelectedAction] = useState(null);
   const [fileErrors, setFileErrors] = useState({ pdf1: null, pdf2: null });
+
+  const chatActions = {
+    ATTACK_SEGMENT: 'attack_segment',
+    COMPARE_SEGMENTS: 'compare_segments',
+    GROWTH_STRATEGY: 'growth_strategy',
+    AUDIENCE_INSIGHTS: 'audience_insights'
+  };
 
   const handleFileChange = (event, fileKey) => {
     const file = event.target.files[0];
@@ -69,22 +77,84 @@ function PdfAnalyzer() {
     setLoading(false);
   };
 
-  const sendMessage = async () => {
-    if (!userMessage.trim()) return;
+  const handleActionClick = async (action) => {
+    setSelectedAction(action);
+    switch (action) {
+      case chatActions.ATTACK_SEGMENT:
+        const segments = extractSegmentsFromAnalysis(analysis.summary);
+        if (!segments || segments.length === 0) {
+          setChatMessages(prev => [...prev, {
+            role: 'assistant',
+            content: 'No se encontraron segmentos para analizar.'
+          }]);
+          return;
+        }
+        
+        const segmentList = segments
+          .map((seg, i) => `${i + 1}. ${seg.name} (${seg.size} usuarios)`)
+          .join('\n');
+        
+        setChatMessages([{
+          role: 'assistant',
+          content: `# Selecciona un segmento para atacar:\n\n${segmentList}\n\nEscribe el número o nombre del segmento que quieres analizar.`
+        }]);
+        break;
 
-    const newMessage = { role: 'user', content: userMessage };
-    setChatMessages(prev => [...prev, newMessage]);
+      case chatActions.COMPARE_SEGMENTS:
+        setChatMessages([{
+          role: 'assistant',
+          content: '# Comparación de Segmentos\nSelecciona dos segmentos para comparar:\n\n' +
+                   '1. Escribe el primer segmento\n2. Luego escribe el segundo segmento'
+        }]);
+        break;
+
+      // Añadir más casos según necesidad
+    }
+  };
+
+  const handleUserMessage = async (message) => {
+    if (!message.trim()) return;
+    
+    setChatMessages(prev => [...prev, { role: 'user', content: message }]);
     setUserMessage('');
     setIsTyping(true);
 
     try {
-      const response = await chatWithAI(userMessage, analysis.summary);
+      let response;
+      switch (selectedAction) {
+        case chatActions.ATTACK_SEGMENT:
+          response = await chatWithAI(
+            `Analiza el segmento "${message}" y proporciona:
+             1. Tamaño y métricas clave
+             2. Comportamiento y preferencias
+             3. Estrategia de conquista detallada
+             4. Tácticas específicas de conversión
+             5. KPIs para medir éxito`,
+            analysis.summary
+          );
+          break;
+
+        case chatActions.COMPARE_SEGMENTS:
+          response = await chatWithAI(
+            `Compara los segmentos mencionados en términos de:
+             1. Tamaño y engagement
+             2. Comportamiento
+             3. Oportunidades de conversión
+             4. Estrategias específicas`,
+            analysis.summary
+          );
+          break;
+
+        default:
+          response = await chatWithAI(message, analysis.summary);
+      }
+
       setChatMessages(prev => [...prev, { role: 'assistant', content: response }]);
     } catch (error) {
-      console.error('Error sending message:', error);
-      setChatMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: 'Sorry, there was an error processing your request.' 
+      console.error('Error:', error);
+      setChatMessages(prev => [...prev, {
+        role: 'assistant',
+        content: 'Hubo un error al procesar tu solicitud.'
       }]);
     } finally {
       setIsTyping(false);
@@ -215,23 +285,16 @@ function PdfAnalyzer() {
             <div className="p-4 border-b">
               <div className="grid grid-cols-2 gap-3">
                 <button 
-                  onClick={() => {
-                    const segments = extractSegmentsFromAnalysis(analysis.summary);
-                    if (!segments || segments.length === 0) {
-                      setChatMessages(prev => [...prev, {
-                        role: 'assistant',
-                        content: 'I apologize, but I could not find any valid segments to analyze. Please make sure the analysis contains segment information.'
-                      }]);
-                      return;
-                    }
-                    handleSegmentSelection(segments);
-                  }}
+                  onClick={() => handleActionClick(chatActions.ATTACK_SEGMENT)}
                   className="p-3 bg-[#f7f7f7] rounded-lg hover:bg-gray-100 text-left transition-colors"
                 >
                   <span className="font-medium">Attack a Segment</span>
                   <p className="text-sm text-gray-600">Create conquest strategy</p>
                 </button>
-                <button className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 text-left">
+                <button 
+                  onClick={() => handleActionClick(chatActions.COMPARE_SEGMENTS)}
+                  className="p-3 bg-[#f7f7f7] rounded-lg hover:bg-gray-100 text-left"
+                >
                   <span className="font-medium">Compare Segments</span>
                   <p className="text-sm text-gray-600">Analyze overlap</p>
                 </button>
@@ -284,11 +347,11 @@ function PdfAnalyzer() {
                            focus:outline-none focus:ring-2 focus:ring-[#1f1f1f] focus:border-transparent
                            disabled:bg-gray-50 text-gray-700 placeholder-gray-500
                            shadow-sm"
-                  onKeyPress={(e) => e.key === 'Enter' && !isTyping && sendMessage()}
+                  onKeyPress={(e) => e.key === 'Enter' && !isTyping && handleUserMessage(userMessage)}
                 />
                 {!isTyping && userMessage.trim() && (
                   <button
-                    onClick={sendMessage}
+                    onClick={() => handleUserMessage(userMessage)}
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 
                              text-gray-700 hover:text-[#1f1f1f] transition-colors"
                   >
