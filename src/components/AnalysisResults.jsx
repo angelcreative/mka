@@ -79,10 +79,18 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
 
     const { headers, data } = tableData;
     
-    // Validación adicional para datos de gráfica
     if (!headers || headers.length < 2 || !data || data.length === 0) {
       return null;
     }
+
+    // Crear un mapa de colores consistente para cada tipo de dato
+    const colorMap = {
+      'Size': 'rgba(59, 130, 246, 0.8)',    // Azul
+      'Share %': 'rgba(139, 92, 246, 0.8)', // Morado
+      'Market Share': 'rgba(16, 185, 129, 0.8)', // Verde
+      'Category Size': 'rgba(245, 158, 11, 0.8)', // Naranja
+      'Penetration': 'rgba(239, 68, 68, 0.8)'    // Rojo
+    };
 
     return (
       <Bar
@@ -91,11 +99,7 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
           datasets: headers.slice(1).map((header, i) => ({
             label: header,
             data: data.map(row => row.values[i]),
-            backgroundColor: [
-              'rgba(59, 130, 246, 0.8)',
-              'rgba(99, 102, 241, 0.8)',
-              'rgba(139, 92, 246, 0.8)'
-            ],
+            backgroundColor: colorMap[header] || `hsl(${i * 50}, 70%, 60%)`,
             borderColor: '#ffffff',
             borderWidth: 1
           }))
@@ -104,10 +108,33 @@ const AnalysisCard = ({ title, content, type, onPrint, onCopy, className = '' })
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            legend: { position: 'top' },
+            legend: {
+              position: 'top',
+              labels: {
+                usePointStyle: true,
+                padding: 20,
+                font: {
+                  size: 12
+                }
+              }
+            },
             tooltip: {
               callbacks: {
-                label: (context) => `${context.dataset.label}: ${context.parsed.y}%`
+                label: (context) => {
+                  const value = context.parsed.y;
+                  const label = context.dataset.label;
+                  return `${label}: ${value}${label.includes('%') ? '%' : ''}`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return value + (this.chart.data.datasets[0].label.includes('%') ? '%' : '');
+                }
               }
             }
           }
@@ -213,6 +240,11 @@ const AnalysisResults = ({ results }) => {
     const title = lines[0].replace(/^#+\s*/, '').trim();
     const content = lines.slice(1).join('\n').trim();
     
+    // El título principal no debe ser una sección independiente
+    if (title.startsWith('Market Segment Analysis:')) {
+      return null;
+    }
+
     // Validar que la sección sea una de las requeridas
     const requiredSections = [
       'Market Segment Analysis',
@@ -234,7 +266,7 @@ const AnalysisResults = ({ results }) => {
       content,
       type: determineContentType(content)
     };
-  });
+  }).filter(Boolean); // Filtrar las secciones nulas
 
   const validSections = sections.filter(section => 
     section.content && 
@@ -279,17 +311,25 @@ const AnalysisResults = ({ results }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-6">
-      {validSections.map((section, index) => (
-        <AnalysisCard
-          key={index}
-          title={section.title}
-          content={section.content}
-          type={section.type}
-          onPrint={() => handlePrint(section)}
-          onCopy={() => handleCopy(section)}
-        />
-      ))}
+    <div className="space-y-6">
+      {/* Título principal fuera de las cards */}
+      <h1 className="text-2xl font-bold text-gray-900">
+        {results.summary.split('\n')[0].replace(/^#+\s*/, '')}
+      </h1>
+      
+      {/* Grid de secciones */}
+      <div className="grid grid-cols-1 gap-6">
+        {validSections.map((section, index) => (
+          <AnalysisCard
+            key={index}
+            title={section.title}
+            content={section.content}
+            type={section.type}
+            onPrint={() => handlePrint(section)}
+            onCopy={() => handleCopy(section)}
+          />
+        ))}
+      </div>
     </div>
   );
 };
