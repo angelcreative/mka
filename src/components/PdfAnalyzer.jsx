@@ -153,7 +153,7 @@ function PdfAnalyzer() {
               placeholder="Enter your brand name (e.g. Disney+)"
               value={brands.myBrand}
               onChange={(e) => setBrands(prev => ({ ...prev, myBrand: e.target.value }))}
-              className="w-full p-2 border border-primary-100 rounded-lg text-text-primary placeholder-text-placeholder"
+              className="w-full p-2 border border-primary-100 rounded-lg text-gray-900 placeholder:text-gray-400"
             />
             <div className="border-2 border-dashed border-primary-100 rounded-lg p-6 text-center">
               <input
@@ -180,7 +180,7 @@ function PdfAnalyzer() {
               placeholder="Enter competitor brand name (e.g. Netflix)"
               value={brands.competitor}
               onChange={(e) => setBrands(prev => ({ ...prev, competitor: e.target.value }))}
-              className="w-full p-2 border border-primary-100 rounded-lg text-text-primary placeholder-text-placeholder"
+              className="w-full p-2 border border-primary-100 rounded-lg text-gray-900 placeholder:text-gray-400"
             />
             <div className="border-2 border-dashed border-primary-100 rounded-lg p-6 text-center">
               <input
