@@ -148,49 +148,33 @@ function PdfAnalyzer() {
         <div className="flex gap-6 justify-center">
           {/* My Brand Upload */}
           <div className="flex-1 max-w-md space-y-4">
+            <input
+              type="text"
+              placeholder="Enter your brand name (e.g. Disney+)"
+              value={brands.myBrand}
+              onChange={(e) => setBrands(prev => ({ ...prev, myBrand: e.target.value }))}
+              className="w-full p-2 border border-primary-100 rounded-lg"
+            />
             <div className="border-2 border-dashed border-primary-100 rounded-lg p-6 text-center">
               <input
                 type="file"
-                accept=".pdf,.xlsx,.xls,.csv"
+                accept=".pdf"
                 onChange={(e) => handleFileChange(e, 'pdf1')}
                 className="hidden"
                 id="pdf1"
               />
               <label htmlFor="pdf1" className="cursor-pointer block">
                 <MdUploadFile className="mx-auto text-4xl text-primary-400 mb-2" />
-                <span className="text-primary-600 font-semibold">My Brand Report</span>
-                <p className="text-sm text-text-tertiary mt-1">Upload PDF, Excel or CSV report</p>
+                <span className="text-primary-600 font-semibold">Upload PDF Report</span>
+                <p className="text-sm text-text-tertiary mt-1">Upload PDF report</p>
                 {files.pdf1 && <p className="mt-2 text-sm text-[#1f1f1f]">{files.pdf1.name}</p>}
                 {fileErrors.pdf1 && <p className="mt-2 text-sm text-red-500">{fileErrors.pdf1}</p>}
               </label>
             </div>
-            <input
-              type="text"
-              placeholder="Enter your brand name (e.g. Disney+)"
-              value={brands.myBrand}
-              onChange={(e) => setBrands(prev => ({ ...prev, myBrand: e.target.value }))}
-              className="w-full p-2 border border-primary-100 rounded-lg text-text-primary placeholder-text-placeholder"
-            />
           </div>
 
           {/* Competitor Upload */}
           <div className="flex-1 max-w-md space-y-4">
-            <div className="border-2 border-dashed border-primary-100 rounded-lg p-6 text-center">
-              <input
-                type="file"
-                accept=".pdf,.xlsx,.xls,.csv"
-                onChange={(e) => handleFileChange(e, 'pdf2')}
-                className="hidden"
-                id="pdf2"
-              />
-              <label htmlFor="pdf2" className="cursor-pointer block">
-                <MdUploadFile className="mx-auto text-4xl text-primary-400 mb-2" />
-                <span className="text-primary-600 font-semibold">Your Competitor Report</span>
-                <p className="text-sm text-text-tertiary mt-1">Upload PDF, Excel or CSV report</p>
-                {files.pdf2 && <p className="mt-2 text-sm text-[#1f1f1f]">{files.pdf2.name}</p>}
-                {fileErrors.pdf2 && <p className="mt-2 text-sm text-red-500">{fileErrors.pdf2}</p>}
-              </label>
-            </div>
             <input
               type="text"
               placeholder="Enter competitor brand name (e.g. Netflix)"
@@ -198,6 +182,22 @@ function PdfAnalyzer() {
               onChange={(e) => setBrands(prev => ({ ...prev, competitor: e.target.value }))}
               className="w-full p-2 border border-primary-100 rounded-lg text-text-primary placeholder-text-placeholder"
             />
+            <div className="border-2 border-dashed border-primary-100 rounded-lg p-6 text-center">
+              <input
+                type="file"
+                accept=".pdf"
+                onChange={(e) => handleFileChange(e, 'pdf2')}
+                className="hidden"
+                id="pdf2"
+              />
+              <label htmlFor="pdf2" className="cursor-pointer block">
+                <MdUploadFile className="mx-auto text-4xl text-primary-400 mb-2" />
+                <span className="text-primary-600 font-semibold">Upload PDF Report</span>
+                <p className="text-sm text-text-tertiary mt-1">Upload PDF report</p>
+                {files.pdf2 && <p className="mt-2 text-sm text-[#1f1f1f]">{files.pdf2.name}</p>}
+                {fileErrors.pdf2 && <p className="mt-2 text-sm text-red-500">{fileErrors.pdf2}</p>}
+              </label>
+            </div>
           </div>
         </div>
 
@@ -247,10 +247,10 @@ function PdfAnalyzer() {
         )}
 
         {showChat && (
-          <div className="fixed inset-y-0 right-0 w-[400px] bg-white shadow-xl flex flex-col">
+          <div className="fixed inset-y-0 right-0 w-[400px] bg-white shadow-xl flex flex-col z-50">
             {/* Header */}
             <div className="bg-[#1f1f1f] text-white p-4 flex justify-between items-center">
-              <h3 className="font-semibold">Ask Audiense AI Agent</h3>
+              <h3 className="font-semibold">Market Intelligence Assistant</h3>
               <button 
                 onClick={() => setShowChat(false)}
                 className="hover:bg-gray-700 p-1 rounded-full transition-colors"
@@ -259,18 +259,6 @@ function PdfAnalyzer() {
                   <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
               </button>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="p-4 border-b text-sm text-gray-600">
-              <p className="mb-2 font-medium text-gray-700">Question suggestions:</p>
-              <div className="space-y-2">
-                <p>• "How can I conquer the [name] segment?"</p>
-                <p>• "Compare segments [segment1] and [segment2]"</p>
-                <p>• "What's the best growth strategy?"</p>
-                <p>• "Analyze the behavior of [name] segment"</p>
-                <p>• "What opportunities exist in [segment]?"</p>
-              </div>
             </div>
 
             {/* Chat Messages */}

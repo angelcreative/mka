@@ -44,56 +44,12 @@ const extractTextFromPdf = async (pdfData) => {
   }
 };
 
-const extractTextFromExcel = async (file) => {
-  try {
-    const arrayBuffer = await file.arrayBuffer();
-    const workbook = XLSX.read(arrayBuffer);
-    let fullText = '';
-
-    workbook.SheetNames.forEach(sheetName => {
-      const worksheet = workbook.Sheets[sheetName];
-      const sheetText = XLSX.utils.sheet_to_txt(worksheet);
-      fullText += `Sheet ${sheetName}:\n${sheetText}\n\n`;
-    });
-
-    return fullText;
-  } catch (error) {
-    console.error('Error extracting text from Excel:', error);
-    throw error;
-  }
-};
-
-const extractTextFromCsv = async (file) => {
-  try {
-    const text = await file.text();
-    // Convertir CSV a una tabla más legible
-    const workbook = XLSX.read(text, { type: 'string' });
-    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-    return XLSX.utils.sheet_to_txt(worksheet);
-  } catch (error) {
-    console.error('Error extracting text from CSV:', error);
-    throw error;
-  }
-};
-
 const getFileContent = async (file) => {
   let extractedData = '';
   
-  if (typeof file === 'string' && file.includes('audiense.com')) {
-    try {
-      const response = await axios.get(file);
-      extractedData = formatAudienseData(response.data);
-    } catch (error) {
-      console.error('Error fetching Audiense data:', error);
-      throw error;
-    }
-  } else if (file.type === 'application/pdf') {
+  if (file.type === 'application/pdf') {
     const buffer = await file.arrayBuffer();
     extractedData = await extractTextFromPdf(buffer);
-  } else if (file.type.includes('spreadsheet') || file.type.includes('excel')) {
-    extractedData = await extractTextFromExcel(file);
-  } else if (file.type === 'text/csv') {
-    extractedData = await extractTextFromCsv(file);
   }
 
   validateExtractedData(extractedData);
