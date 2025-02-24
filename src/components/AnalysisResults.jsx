@@ -320,16 +320,74 @@ const AnalysisResults = ({ results }) => {
   }
 
   const handlePrint = (section) => {
+    // Función para formatear la tabla
+    const formatTableForPrint = (content) => {
+      // Separar las filas por el carácter |
+      const rows = content.split('\n')
+        .filter(row => row.includes('|'))
+        .map(row => row.split('|')
+          .filter(cell => cell.trim())
+          .map(cell => cell.trim())
+        );
+      
+      if (rows.length === 0) return content;
+
+      // Crear una tabla HTML formateada
+      const table = document.createElement('table');
+      table.style.borderCollapse = 'collapse';
+      table.style.width = '100%';
+      
+      // Añadir filas
+      rows.forEach((row, i) => {
+        const tr = document.createElement('tr');
+        row.forEach(cell => {
+          const td = document.createElement(i === 0 ? 'th' : 'td');
+          td.style.border = '1px solid #ddd';
+          td.style.padding = '8px';
+          td.style.textAlign = 'left';
+          td.textContent = cell;
+          tr.appendChild(td);
+        });
+        table.appendChild(tr);
+      });
+
+      return table.outerHTML;
+    };
+
     const printWindow = window.open('', '_blank');
     printWindow.document.write(`
       <html>
         <head>
           <title>${section.title}</title>
-          <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              line-height: 1.6;
+              padding: 20px;
+            }
+            h1 {
+              color: #333;
+              border-bottom: 2px solid #333;
+              padding-bottom: 10px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin: 15px 0;
+            }
+            th, td {
+              border: 1px solid #ddd;
+              padding: 8px;
+              text-align: left;
+            }
+            th {
+              background-color: #f5f5f5;
+            }
+          </style>
         </head>
-        <body class="p-8">
-          <h1 class="text-2xl font-bold mb-4">${section.title}</h1>
-          <div class="prose">${section.content}</div>
+        <body>
+          <h1>${section.title}</h1>
+          <div>${formatTableForPrint(section.content)}</div>
         </body>
       </html>
     `);
@@ -344,6 +402,68 @@ const AnalysisResults = ({ results }) => {
     } catch (err) {
       console.error('Failed to copy:', err);
     }
+  };
+
+  const renderSegmentChart = (data) => {
+    const chartData = {
+      labels: data.map(item => item.segment),
+      datasets: [
+        {
+          label: `${data[0].segment} Size`,
+          data: data.map(item => item.size),
+          backgroundColor: 'rgba(231, 76, 60, 0.7)',
+        },
+        {
+          label: `${data[1].segment} Size`,
+          data: data.map(item => item.compSize),
+          backgroundColor: 'rgba(241, 196, 15, 0.7)',
+        }
+      ]
+    };
+
+    const options = {
+      scales: {
+        x: {
+          grid: {
+            display: false
+          },
+          ticks: {
+            callback: function(value) {
+              // Mostrar el nombre completo del segmento
+              return data[value].fullName || data[value].segment;
+            }
+          }
+        },
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: 'rgba(0, 0, 0, 0.1)'
+          },
+          ticks: {
+            callback: function(value) {
+              return value + '%';
+            }
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          labels: {
+            usePointStyle: true,
+            generateLabels: function(chart) {
+              return chart.data.datasets.map((dataset, i) => ({
+                text: dataset.label,
+                fillStyle: dataset.backgroundColor,
+                hidden: !chart.isDatasetVisible(i),
+                index: i
+              }));
+            }
+          }
+        }
+      }
+    };
+
+    return <Bar data={chartData} options={options} />;
   };
 
   return (
