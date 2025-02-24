@@ -202,7 +202,7 @@ function PdfAnalyzer() {
         </div>
 
         <div className="text-center text-sm text-purple-400">
-          <p className="text-text-tertiary">Supported formats: PDF documents, Excel spreadsheets and CSV files (.pdf, .xlsx, .xls, .csv)</p>
+          <p className="text-text-tertiary">Once the analysis is generated, you can use the AI chat agent to dive deeper into the insights</p>
         </div>
 
         <div className="flex justify-center">
