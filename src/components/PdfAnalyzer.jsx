@@ -153,7 +153,7 @@ function PdfAnalyzer() {
               placeholder="Enter your brand name (e.g. Disney+)"
               value={brands.myBrand}
               onChange={(e) => setBrands(prev => ({ ...prev, myBrand: e.target.value }))}
-              className="w-full p-2 border border-primary-100 rounded-lg"
+              className="w-full p-2 border border-primary-100 rounded-lg text-text-primary placeholder-text-placeholder"
             />
             <div className="border-2 border-dashed border-primary-100 rounded-lg p-6 text-center">
               <input
